@@ -1,0 +1,557 @@
+/* ==========================================================================
+       App Layout & Header
+       ========================================================================== */
+    header.app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+    .brand-badge {
+      background: var(--border);
+      color: var(--muted-foreground);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #3f3f46;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 1px 0;
+    }
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Main Container & View Panes */
+    main.main-content {
+      padding: 14px 16px;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    .view-pane {
+      display: none;
+    }
+    .view-pane.active {
+      display: block;
+    }
+
+    .status-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--muted-foreground);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Manga Grid */
+    .grid-container {
+      display: grid;
+      gap: 12px;
+      align-items: start;
+    }
+    .grid-container.grid-comfortable {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-container.grid-dense {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 640px) {
+      .grid-container.grid-comfortable {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+      }
+      .grid-container.grid-dense {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+      }
+    }
+
+    /* Manga Card */
+    .manga-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+      position: relative;
+    }
+    .manga-card:hover {
+      border-color: #3f3f46;
+      background: var(--card-hover);
+    }
+    .manga-card:active {
+      transform: scale(0.98);
+    }
+
+    .card-thumb-wrap {
+      position: relative;
+      width: 100%;
+      background: #08080a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-thumb {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      transition: opacity 0.2s ease;
+    }
+
+    .card-badge-top {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid var(--border);
+      color: #fafafa;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .card-info {
+      padding: 8px 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+      flex-grow: 1;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--foreground);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+    .grid-dense .card-title {
+      font-size: 11px;
+      -webkit-line-clamp: 1;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .artist-badge {
+      color: var(--muted-foreground);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 65%;
+    }
+
+    /* Card Progress Indicator */
+    .card-progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 2;
+      overflow: hidden;
+    }
+    .card-progress-fill {
+      height: 100%;
+      background: #fafafa;
+      transition: width 0.2s ease;
+    }
+    .progress-badge {
+      color: #fafafa;
+      background: #18181b;
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Infinite Loading Sentinel */
+    .loading-sentinel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 0;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--foreground);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+/* ==========================================================================
+       Dedicated Explore / Taxonomy Page
+       ========================================================================== */
+    .explore-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .taxonomy-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .taxonomy-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .taxonomy-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .taxonomy-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 12.5px;
+      color: var(--secondary-foreground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .tag-pill:hover {
+      background: #27272a;
+      border-color: #3f3f46;
+      color: #fafafa;
+    }
+    .tag-pill .count {
+      background: #000000;
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* ==========================================================================
+       Dedicated History View
+       ========================================================================== */
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .history-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+    .history-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .history-card:hover {
+      border-color: #3f3f46;
+      background: var(--card-hover);
+    }
+    .history-thumb-wrap {
+      width: 72px;
+      min-width: 72px;
+      height: 100px;
+      background: #08080a;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .history-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .history-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+    .history-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--foreground);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .history-title:hover {
+      text-decoration: underline;
+    }
+    .history-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: var(--muted-foreground);
+      flex-wrap: wrap;
+    }
+    .history-progress-track {
+      width: 100%;
+      height: 4px;
+      background: #27272a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .history-progress-fill {
+      height: 100%;
+      background: #fafafa;
+      border-radius: 2px;
+      transition: width 0.2s ease;
+    }
+    .history-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .history-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--muted);
+      gap: 12px;
+    }
+
+/* ==========================================================================
+       Floating Pagination Bar in Footer
+       ========================================================================== */
+    .footer-pagination-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2px 0 6px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .footer-pagination-wrap .btn-icon {
+      width: 28px;
+      height: 28px;
+    }
+    .footer-pagination-wrap .btn-secondary {
+      height: 28px;
+      padding: 0 10px;
+      font-size: 11.5px;
+    }
+    .page-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--muted-foreground);
+    }
+    .page-num-input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--foreground);
+      border-radius: var(--radius-sm);
+      height: 28px;
+      width: 44px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      outline: none;
+    }
+    .page-num-input:focus {
+      border-color: var(--ring);
+    }
+    .page-num-input::-webkit-outer-spin-button,
+    .page-num-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .btn:disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       App Footer (Search + Language Filter + Navigation at Bottom)
+       ========================================================================== */
+    footer.app-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      padding: 8px 12px 6px 12px;
+      gap: 6px;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.8);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    footer.app-footer.footer-hidden {
+      transform: translateY(115%);
+    }
+    .footer-search-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .footer-search-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 4px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color 0.15s ease;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+    }
+    .nav-tab:hover, .nav-tab.active {
+      color: var(--foreground);
+    }
+    .nav-tab svg {
+      width: 17px;
+      height: 17px;
+    }
