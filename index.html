@@ -1,0 +1,3321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z'/%3E%3Cpath d='M6 6h10'/%3E%3Cpath d='M6 10h10'/%3E%3C/svg%3E">
+  <title>LANraragi</title>
+  <meta name="theme-color" content="#000000">
+  <style>
+    /* ==========================================================================
+       shadcn/ui Zinc Monochrome Design System
+       ========================================================================== */
+    :root {
+      --background: #000000;
+      --foreground: #fafafa;
+      --card: #08080a;
+      --card-hover: #111114;
+      --popover: #08080a;
+      --border: #1e1e22;
+      --border-subtle: #141416;
+      --input: #0c0c0e;
+      --primary: #ffffff;
+      --primary-foreground: #000000;
+      --secondary: #111114;
+      --secondary-foreground: #fafafa;
+      --muted: #5e5e68;
+      --muted-foreground: #a1a1aa;
+      --accent: #18181b;
+      --accent-foreground: #ffffff;
+      --ring: #52525b;
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-full: 9999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--background);
+      color: var(--foreground);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Geist", Helvetica, Arial, sans-serif;
+      font-size: 13.5px;
+      line-height: 1.5;
+      padding-top: 6px;
+      padding-bottom: 175px;
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.modal-open {
+      overflow: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* Minimalist Scrollbars */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #27272a;
+      border-radius: var(--radius-full);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3f3f46;
+    }
+
+    /* ==========================================================================
+       shadcn Component Styles
+       ========================================================================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      height: 34px;
+      padding: 0 12px;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+      font-family: inherit;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-default {
+      background: var(--primary);
+      color: var(--primary-foreground);
+    }
+    .btn-default:hover {
+      background: #e4e4e7;
+    }
+
+    .btn-secondary {
+      background: var(--secondary);
+      color: var(--secondary-foreground);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      background: #222226;
+      border-color: #3f3f46;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--secondary-foreground);
+      border-color: var(--border);
+    }
+    .btn-outline:hover {
+      background: var(--secondary);
+      border-color: #3f3f46;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted-foreground);
+    }
+    .btn-ghost:hover {
+      background: var(--secondary);
+      color: var(--foreground);
+    }
+
+    .btn-icon {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Input & Search */
+    .input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--foreground);
+      border-radius: var(--radius-sm);
+      height: 36px;
+      padding: 0 12px;
+      font-size: 13px;
+      font-family: inherit;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .input:focus {
+      border-color: var(--ring);
+      box-shadow: 0 0 0 1px var(--ring);
+    }
+    .input::placeholder {
+      color: var(--muted);
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+    .search-box .search-icon {
+      position: absolute;
+      left: 10px;
+      color: var(--muted);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+    .search-box .input {
+      padding-left: 34px;
+      padding-right: 32px;
+    }
+    .search-box .clear-btn {
+      position: absolute;
+      right: 8px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+    .search-box .clear-btn.visible {
+      display: flex;
+    }
+    .search-box .clear-btn:hover {
+      color: var(--foreground);
+    }
+
+    /* Badges / Chips */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--radius-full);
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted-foreground);
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .badge:hover {
+      background: var(--secondary);
+      border-color: #3f3f46;
+      color: var(--foreground);
+    }
+    .badge.active {
+      background: #27272a;
+      border-color: #52525b;
+      color: #fafafa;
+    }
+
+    /* Select Dropdown */
+    .select-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+    .select {
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--secondary-foreground);
+      border-radius: var(--radius-sm);
+      height: 32px;
+      padding: 0 28px 0 10px;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    .select:focus {
+      border-color: var(--ring);
+    }
+    .select-wrap svg {
+      position: absolute;
+      right: 8px;
+      pointer-events: none;
+      color: var(--muted);
+    }
+    .select-wrap-compact {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 28px;
+    }
+    .select-compact {
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--secondary-foreground);
+      border-radius: var(--radius-sm);
+      height: 28px !important;
+      padding: 0 22px 0 8px !important;
+      font-size: 11px !important;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.15s ease;
+      line-height: 26px;
+    }
+    .select-compact:focus {
+      border-color: var(--ring);
+    }
+    .select-wrap-compact svg {
+      position: absolute;
+      right: 6px;
+      pointer-events: none;
+      color: var(--muted);
+    }
+
+    /* Segmented Tabs Control */
+    .tabs-list {
+      display: inline-flex;
+      height: 34px;
+      align-items: center;
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 2px;
+      gap: 2px;
+    }
+    .tab-trigger {
+      padding: 4px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 4px;
+      background: transparent;
+      border: none;
+      color: var(--muted-foreground);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .tab-trigger:hover {
+      color: var(--foreground);
+    }
+    .tab-trigger.active {
+      background: #27272a;
+      color: var(--foreground);
+    }
+
+    /* ==========================================================================
+       App Layout & Header
+       ========================================================================== */
+    header.app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.3px;
+    }
+    .brand-badge {
+      background: var(--border);
+      color: var(--muted-foreground);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid #3f3f46;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 1px 0;
+    }
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Main Container & View Panes */
+    main.main-content {
+      padding: 14px 16px;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    .view-pane {
+      display: none;
+    }
+    .view-pane.active {
+      display: block;
+    }
+
+    .status-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: var(--muted-foreground);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Manga Grid */
+    .grid-container {
+      display: grid;
+      gap: 12px;
+      align-items: start;
+    }
+    .grid-container.grid-comfortable {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-container.grid-dense {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 640px) {
+      .grid-container.grid-comfortable {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 14px;
+      }
+      .grid-container.grid-dense {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+      }
+    }
+
+    /* Manga Card */
+    .manga-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+      position: relative;
+    }
+    .manga-card:hover {
+      border-color: #3f3f46;
+      background: var(--card-hover);
+    }
+    .manga-card:active {
+      transform: scale(0.98);
+    }
+
+    .card-thumb-wrap {
+      position: relative;
+      width: 100%;
+      background: #08080a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-thumb {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      transition: opacity 0.2s ease;
+    }
+
+    .card-badge-top {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.9);
+      border: 1px solid var(--border);
+      color: #fafafa;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .card-info {
+      padding: 8px 10px 10px 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 6px;
+      flex-grow: 1;
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--foreground);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+    .grid-dense .card-title {
+      font-size: 11px;
+      -webkit-line-clamp: 1;
+    }
+    .card-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .artist-badge {
+      color: var(--muted-foreground);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 65%;
+    }
+
+    /* Card Progress Indicator */
+    .card-progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 2;
+      overflow: hidden;
+    }
+    .card-progress-fill {
+      height: 100%;
+      background: #fafafa;
+      transition: width 0.2s ease;
+    }
+    .progress-badge {
+      color: #fafafa;
+      background: #18181b;
+      border: 1px solid var(--border);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* Infinite Loading Sentinel */
+    .loading-sentinel {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px 0;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--foreground);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Modern shadcn-style Skeleton Loader (Monochrome AMOLED / Zinc Style) */
+    @keyframes skeleton-shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+    .skeleton {
+      background-color: #111114 !important;
+      background-image: linear-gradient(
+        90deg,
+        #111114 0%,
+        rgba(255, 255, 255, 0.04) 50%,
+        #111114 100%
+      ) !important;
+      background-size: 200% 100% !important;
+      animation: skeleton-shimmer 1.6s ease-in-out infinite !important;
+      border-radius: var(--radius-sm);
+    }
+    .manga-card-skeleton {
+      pointer-events: none;
+      user-select: none;
+    }
+    .manga-card-skeleton .card-thumb-wrap {
+      height: 220px;
+      width: 100%;
+    }
+    .reader-skeleton {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+      z-index: 1002;
+    }
+    .reader-skeleton-page {
+      width: min(85vw, 550px);
+      height: min(85vh, 800px);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+    .paged-img.skeleton-loading {
+      background-color: #111114 !important;
+      background-image: linear-gradient(
+        90deg,
+        #111114 0%,
+        rgba(255, 255, 255, 0.04) 50%,
+        #111114 100%
+      ) !important;
+      background-size: 200% 100% !important;
+      animation: skeleton-shimmer 1.6s ease-in-out infinite !important;
+    }
+    .page-thumb-img-wrap.skeleton {
+      background-color: #111114 !important;
+      background-image: linear-gradient(
+        90deg,
+        #111114 0%,
+        rgba(255, 255, 255, 0.04) 50%,
+        #111114 100%
+      ) !important;
+      background-size: 200% 100% !important;
+      animation: skeleton-shimmer 1.6s ease-in-out infinite !important;
+    }
+
+    /* ==========================================================================
+       Dedicated Explore / Taxonomy Page
+       ========================================================================== */
+    .explore-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .taxonomy-tabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    .taxonomy-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .taxonomy-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .taxonomy-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 12.5px;
+      color: var(--secondary-foreground);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+    .tag-pill:hover {
+      background: #27272a;
+      border-color: #3f3f46;
+      color: #fafafa;
+    }
+    .tag-pill .count {
+      background: #000000;
+      border: 1px solid var(--border);
+      color: var(--muted-foreground);
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* ==========================================================================
+       Dedicated History View
+       ========================================================================== */
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .history-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 850px;
+      margin: 0 auto;
+    }
+    .history-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .history-card:hover {
+      border-color: #3f3f46;
+      background: var(--card-hover);
+    }
+    .history-thumb-wrap {
+      width: 72px;
+      min-width: 72px;
+      height: 100px;
+      background: #08080a;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .history-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .history-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+    .history-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--foreground);
+      line-height: 1.35;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .history-title:hover {
+      text-decoration: underline;
+    }
+    .history-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: var(--muted-foreground);
+      flex-wrap: wrap;
+    }
+    .history-progress-track {
+      width: 100%;
+      height: 4px;
+      background: #27272a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .history-progress-fill {
+      height: 100%;
+      background: #fafafa;
+      border-radius: 2px;
+      transition: width 0.2s ease;
+    }
+    .history-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .history-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      text-align: center;
+      color: var(--muted);
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       Drawer / Sheet (Fixed Header bleed bug)
+       ========================================================================== */
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 900;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .sheet-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sheet {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #08080a;
+      border-top: 1px solid var(--border);
+      border-top-left-radius: var(--radius-lg);
+      border-top-right-radius: var(--radius-lg);
+      z-index: 901;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
+    }
+    .sheet.open {
+      transform: translateY(0);
+    }
+    .sheet.dragging,
+    .sheet-backdrop.dragging {
+      transition: none !important;
+    }
+    .sheet-close-btn {
+      position: absolute;
+      top: -4px;
+      right: 0;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--secondary);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--muted-foreground);
+      font-size: 13px;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.15s ease;
+    }
+    .sheet-close-btn:hover {
+      background: #27272a;
+      color: #fafafa;
+      border-color: #3f3f46;
+    }
+    @media (min-width: 640px) {
+      .sheet {
+        top: 0;
+        bottom: 0;
+        left: auto;
+        right: 0;
+        width: 440px;
+        max-height: 100vh;
+        border-top: none;
+        border-left: 1px solid var(--border);
+        border-radius: 0;
+        transform: translateX(100%);
+      }
+      .sheet.open {
+        transform: translateX(0);
+      }
+    }
+
+    .sheet-handle-bar {
+      width: 100%;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: #27272a;
+      border-radius: 2px;
+    }
+    @media (min-width: 640px) {
+      .sheet-handle-bar {
+        display: none;
+      }
+    }
+
+    .sheet-content {
+      overflow-y: auto;
+      padding: 16px 20px 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .detail-header {
+      display: flex;
+      gap: 14px;
+    }
+    .detail-thumb {
+      width: 100px;
+      height: auto;
+      max-height: 155px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+      background: #000000;
+    }
+    .detail-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      flex: 1;
+    }
+    .detail-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--foreground);
+    }
+
+    .tag-category-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .tag-chips-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* Drawer Progress Box */
+    .drawer-progress-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #111114;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+    }
+    .drawer-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--muted-foreground);
+    }
+    .drawer-progress-header strong {
+      color: #fafafa;
+    }
+    .drawer-progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #27272a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .drawer-progress-fill {
+      height: 100%;
+      background: #fafafa;
+      border-radius: 2px;
+      transition: width 0.2s ease;
+    }
+
+    /* ==========================================================================
+       Fullscreen Modern Reader
+       ========================================================================== */
+    .reader-modal {
+      position: fixed;
+      inset: 0;
+      background: #000000;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+    }
+    .reader-modal.active {
+      display: flex;
+    }
+
+    .reader-overlay {
+      position: absolute;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 1010;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .reader-bottom {
+      bottom: 0;
+      border-top: 1px solid var(--border);
+      padding: 8px 14px 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+    .reader-overlay.hidden,
+    .reader-bottom.hidden {
+      transform: translateY(100%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .reader-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+    }
+    .reader-controls-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex: 1;
+    }
+    .reader-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .reader-bottom .btn {
+      height: 30px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+    .reader-bottom .btn-icon {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+    }
+
+    .reader-title {
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--foreground);
+    }
+
+    .reader-canvas {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      user-select: none;
+    }
+
+    .paged-view {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      touch-action: pan-y pinch-zoom;
+    }
+    .paged-spread-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      pointer-events: none;
+    }
+    .paged-img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      box-shadow: none;
+      transition: opacity 0.12s ease;
+    }
+    .double-mode {
+      gap: 0 !important;
+    }
+    .double-mode .paged-img {
+      max-width: 50% !important;
+      max-height: 100% !important;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      box-shadow: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+    .double-mode #paged-img-left {
+      object-position: right center;
+    }
+    .double-mode #paged-img-right {
+      object-position: left center;
+    }
+
+    .paged-touch-left, .paged-touch-right, .paged-touch-mid {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      z-index: 1005;
+    }
+    .paged-touch-left { left: 0; width: 33%; cursor: pointer; }
+    .paged-touch-mid { left: 33%; width: 34%; cursor: pointer; }
+    .paged-touch-right { right: 0; width: 33%; cursor: pointer; }
+
+    .webtoon-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .webtoon-view img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Scrubber Slider */
+    .scrubber-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+    }
+    .scrubber-slider {
+      flex: 1;
+      accent-color: #fafafa;
+      cursor: pointer;
+      height: 4px;
+      background: #27272a;
+      border-radius: 2px;
+      outline: none;
+    }
+    .scrubber-counter {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--muted-foreground);
+      min-width: 75px;
+      text-align: right;
+    }
+
+    /* ==========================================================================
+       Reader Pages Grid Sheet (Thumbnails Library inside Reader)
+       ========================================================================== */
+    .reader-grid-sheet {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.97);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 1100;
+      display: none;
+      flex-direction: column;
+    }
+    .reader-grid-sheet.open {
+      display: flex;
+    }
+
+    .grid-sheet-header {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grid-sheet-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+      gap: 8px;
+    }
+    @media (min-width: 600px) {
+      .grid-sheet-body {
+        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+        gap: 10px;
+      }
+    }
+
+    .page-thumb-card {
+      background: #08080a;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      height: 128px;
+    }
+    .page-thumb-card:hover {
+      border-color: #52525b;
+      transform: translateY(-2px);
+    }
+    .page-thumb-card.active {
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 1px #ffffff;
+    }
+    .page-thumb-img-wrap {
+      flex: 1;
+      width: 100%;
+      height: 106px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000000;
+      padding: 2px;
+      overflow: hidden;
+    }
+    .page-thumb-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain !important;
+      display: block;
+    }
+    .page-thumb-card .page-num {
+      height: 22px;
+      background: #0d0d10;
+      border-top: 1px solid var(--border);
+      color: var(--muted-foreground);
+      font-size: 10.5px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .page-thumb-card.active .page-num {
+      color: #ffffff;
+      font-weight: 600;
+      background: #141418;
+    }
+
+    /* ==========================================================================
+       Floating Pagination Bar in Footer
+       ========================================================================== */
+    .footer-pagination-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2px 0 6px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .footer-pagination-wrap .btn-icon {
+      width: 28px;
+      height: 28px;
+    }
+    .footer-pagination-wrap .btn-secondary {
+      height: 28px;
+      padding: 0 10px;
+      font-size: 11.5px;
+    }
+    .page-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--muted-foreground);
+    }
+    .page-num-input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--foreground);
+      border-radius: var(--radius-sm);
+      height: 28px;
+      width: 44px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      outline: none;
+    }
+    .page-num-input:focus {
+      border-color: var(--ring);
+    }
+    .page-num-input::-webkit-outer-spin-button,
+    .page-num-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .btn:disabled {
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       App Footer (Search + Language Filter + Navigation at Bottom)
+       ========================================================================== */
+    footer.app-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      padding: 8px 12px 6px 12px;
+      gap: 6px;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.8);
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+    footer.app-footer.footer-hidden {
+      transform: translateY(115%);
+    }
+    .footer-search-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .footer-search-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 4px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .nav-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: color 0.15s ease;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+    }
+    .nav-tab:hover, .nav-tab.active {
+      color: var(--foreground);
+    }
+    .nav-tab svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    /* Search Autocomplete Suggestions (LANraragi Style) */
+    .search-suggestions-box {
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      right: 0;
+      margin-bottom: 8px;
+      background: #09090c;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      max-height: 260px;
+      overflow-y: auto;
+      z-index: 120;
+      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.85);
+      display: none;
+    }
+    .suggestion-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      transition: background 0.1s ease;
+    }
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+    .suggestion-item:hover, .suggestion-item.highlighted {
+      background: #16161a;
+    }
+    .suggestion-tag-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .suggestion-ns {
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 1px 5px;
+      border-radius: 4px;
+      border: 1px solid #27272a;
+      background: #111114;
+      color: #a1a1aa;
+      flex-shrink: 0;
+    }
+    .suggestion-ns.ns-artist { color: #f472b6; border-color: #831843; }
+    .suggestion-ns.ns-character { color: #60a5fa; border-color: #1e3a8a; }
+    .suggestion-ns.ns-group { color: #fbbf24; border-color: #78350f; }
+    .suggestion-ns.ns-series { color: #a78bfa; border-color: #4c1d95; }
+    .suggestion-ns.ns-publisher { color: #34d399; border-color: #064e3b; }
+    .suggestion-ns.ns-tag { color: #e4e4e7; border-color: #3f3f46; }
+    .suggestion-count {
+      font-size: 11px;
+      color: var(--muted);
+      padding-left: 8px;
+      flex-shrink: 0;
+    }
+
+    /* Reader Pager (No Slider, Just Clean Number Navigation) */
+    .reader-pager-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding-top: 2px;
+    }
+    .reader-page-number {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fafafa;
+      padding: 0 8px;
+      user-select: none;
+      min-width: 80px;
+      text-align: center;
+      letter-spacing: 0.3px;
+    }
+
+  </style>
+</head>
+<body>
+
+  
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    
+    <!-- PANE 1: Library View -->
+    <div id="view-library" class="view-pane active">
+      <div class="status-summary">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <strong id="library-count-text">Loading archives...</strong>
+          <span id="current-filter-badge" style="display: none;" class="badge" onclick="clearSearch()">
+            <span id="current-filter-text"></span> &times;
+          </span>
+        </div>
+      </div>
+
+      <div class="grid-container grid-comfortable" id="manga-grid">
+        <!-- Manga Cards dynamically rendered here -->
+      </div>
+
+
+    </div>
+
+    <!-- PANE 2: Explore & Browse by Taxonomy (Artists, Groups, Tags) -->
+    <div id="view-explore" class="view-pane">
+      <div class="explore-header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2 style="font-size: 16px; font-weight: 600;">Browse by Category</h2>
+          <div class="select-wrap">
+            <select id="taxonomy-sort-select" class="select" onchange="renderTaxonomy()">
+              <option value="count">Most Works</option>
+              <option value="name">Name (A-Z)</option>
+            </select>
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+
+        <!-- Taxonomy Namespace Tabs -->
+        <div class="taxonomy-tabs">
+          <button class="badge active" onclick="switchTaxonomyNamespace('artist', this)">Artists</button>
+          <button class="badge" onclick="switchTaxonomyNamespace('group', this)">Groups</button>
+          <button class="badge" onclick="switchTaxonomyNamespace('character', this)">Characters</button>
+          <button class="badge" onclick="switchTaxonomyNamespace('', this)">Tags</button>
+          <button class="badge" onclick="switchTaxonomyNamespace('publisher', this)">Publishers</button>
+          <button class="badge" onclick="switchTaxonomyNamespace('series', this)">Series</button>
+        </div>
+
+        <!-- Filter within taxonomy -->
+        <input type="text" id="taxonomy-search-input" class="input" placeholder="Filter in this list..." oninput="filterTaxonomyList(this.value)">
+      </div>
+
+      <!-- Taxonomy Tags Grid -->
+      <div class="taxonomy-grid" id="taxonomy-grid">
+        <div class="spinner"></div>
+      </div>
+    </div>
+
+    <!-- PANE 3: Reading History View -->
+    <div id="view-history" class="view-pane">
+      <div class="history-header">
+        <div class="history-title-wrap">
+          <h2 style="font-size: 16px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 8px;">
+            <svg style="width: 17px; height: 17px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Reading History
+          </h2>
+          <span class="badge" id="history-count-badge">0 items</span>
+        </div>
+        <button class="btn btn-outline" id="btn-clear-history" onclick="clearReadingHistoryPrompt()" style="height: 28px; font-size: 11.5px; padding: 0 10px; display: inline-flex; align-items: center; gap: 5px;">
+          <svg style="width: 13px; height: 13px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+          Clear History
+        </button>
+      </div>
+
+      <div class="history-list" id="history-list">
+        <!-- Rendered by renderHistoryView() -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Archive Details Sheet (Drawer) -->
+  <div class="sheet-backdrop" id="sheet-backdrop" onclick="closeDrawer()"></div>
+  <div class="sheet" id="sheet">
+    <div class="sheet-handle-bar" onclick="closeDrawer()"><div class="sheet-handle"></div></div>
+    <div class="sheet-content" id="sheet-content">
+      <!-- Dynamic Archive Details will be injected here -->
+    </div>
+  </div>
+
+  <!-- Fullscreen Modern Reader Modal -->
+  <div class="reader-modal" id="reader-modal">
+    <!-- Reader Canvas -->
+    <div class="reader-canvas" id="reader-canvas">
+      <!-- Dedicated Reader Skeleton Placeholder -->
+      <div class="reader-skeleton" id="reader-skeleton" style="display: none;">
+        <div class="skeleton reader-skeleton-page"></div>
+      </div>
+
+      <!-- Paged View Mode -->
+      <div class="paged-view" id="paged-view">
+        <div class="paged-touch-left" onclick="handleTouchLeft()"></div>
+        <div class="paged-touch-mid" onclick="toggleReaderOverlay()"></div>
+        <div class="paged-touch-right" onclick="handleTouchRight()"></div>
+        <div class="paged-spread-wrap" id="paged-spread-wrap">
+          <img class="paged-img" id="paged-img-left" src="" alt="Left page" style="display: none;">
+          <img class="paged-img" id="paged-img-right" src="" alt="Right page">
+        </div>
+      </div>
+      <!-- Webtoon Continuous Vertical View -->
+      <div class="webtoon-view" id="webtoon-view">
+        <!-- Vertical images populated here -->
+      </div>
+    </div>
+
+    <!-- Reader Footer Overlay (All Controls) -->
+    <div class="reader-overlay reader-bottom" id="reader-bottom">
+      <!-- Row 1: Back, Title, Grid, Reading Direction (Arrow), Spread Mode (Boxes) -->
+      <div class="reader-controls-row">
+        <div class="reader-controls-left">
+          <button class="btn btn-secondary btn-icon" onclick="closeReader()" title="Back to Library">
+            <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <div class="reader-title" id="reader-title">Manga Title</div>
+        </div>
+        <div class="reader-controls-right">
+          <!-- Pages Overview Grid Button -->
+          <button class="btn btn-secondary btn-icon" onclick="openReaderGrid()" title="Pages Overview / Library">
+            <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </button>
+          <!-- RTL / LTR Direction as Arrow -->
+          <button class="btn btn-secondary btn-icon" id="reader-dir-btn" onclick="toggleReadingDirection()" title="Right-to-Left (Manga)">
+            <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+          </button>
+          <!-- 1 Page / 2 Pages Spread as Boxes -->
+          <button class="btn btn-secondary btn-icon" id="reader-spread-btn" onclick="toggleSpreadMode()" title="Single Page">
+            <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>
+          </button>
+        </div>
+      </div>
+      <!-- Row 2: Page Number Navigation (No Slider) -->
+      <div class="reader-pager-wrap">
+        <button class="btn btn-secondary btn-icon" onclick="prevPage()" title="Previous Page">
+          <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="reader-page-number" id="scrubber-counter">1 / 1</div>
+        <button class="btn btn-secondary btn-icon" onclick="nextPage()" title="Next Page">
+          <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Reader Pages Grid Sheet (Thumbnails Library inside Reader) -->
+    <div class="reader-grid-sheet" id="reader-grid-sheet">
+      <div class="grid-sheet-header">
+        <button class="btn btn-secondary btn-icon" onclick="closeReaderGrid()" title="Back to Reader">
+          <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div style="font-size: 13.5px; font-weight: 600;">Pages Overview (<span id="grid-sheet-total">0</span>)</div>
+        <button class="btn btn-secondary btn-icon" onclick="closeReaderGrid()" title="Close">✕</button>
+      </div>
+      <div class="grid-sheet-body" id="grid-sheet-body">
+        <!-- Page thumbnails cards rendered here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- App Footer: Search, Language Filter & Navigation at Bottom -->
+  <footer class="app-footer" id="app-footer">
+    <!-- Floating Pagination Row -->
+    <div class="footer-pagination-wrap" id="footer-pagination-wrap">
+      <button class="btn btn-secondary btn-icon" id="page-first-btn" onclick="goToPage(1)" title="First Page">
+        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+      </button>
+      <button class="btn btn-secondary" id="page-prev-btn" onclick="goToPage(currentPageNum - 1)">
+        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+        Prev
+      </button>
+      <div class="page-indicator">
+        <span>Page</span>
+        <input type="number" id="page-input" class="page-num-input" min="1" value="1" onkeydown="if(event.key==='Enter') goToPage(parseInt(this.value))" onblur="goToPage(parseInt(this.value))">
+        <span>/ <strong id="page-total-text">1</strong></span>
+      </div>
+      <button class="btn btn-secondary" id="page-next-btn" onclick="goToPage(currentPageNum + 1)">
+        Next
+        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <button class="btn btn-secondary btn-icon" id="page-last-btn" onclick="goToPage(totalPages)" title="Last Page">
+        <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 17 5-5-5-5"/><path d="m13 17 5-5-5-5"/></svg>
+      </button>
+    </div>
+
+    <div class="footer-search-wrap">
+      <div class="footer-search-row">
+        <!-- Search Input & Autocomplete Container -->
+        <div class="search-box" style="position: relative;">
+          <!-- Floating Tag Suggestions Dropdown (LANraragi Style) -->
+          <div class="search-suggestions-box" id="search-suggestions"></div>
+
+          <div class="search-icon">
+            <svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </div>
+          <input type="text" id="search-input" class="input" placeholder="Search title, artist:..., -tag..." oninput="handleSearchInput(this.value)" onkeydown="handleSearchKeyDown(event)" autocomplete="off">
+          <button class="clear-btn" id="clear-search-btn" onclick="clearSearch()" title="Clear search">✕</button>
+        </div>
+      </div>
+
+      <!-- Language Filter Chips, Sort By & Density Toggle -->
+      <div class="filter-row">
+        <span class="badge active" id="filter-chip-all" onclick="applyLanguageFilter('', this)">All Languages</span>
+        <span class="badge" id="filter-chip-en" onclick="applyLanguageFilter('language:en', this)">English</span>
+        <span class="badge" id="filter-chip-ja" onclick="applyLanguageFilter('language:ja', this)">Japanese</span>
+        <div style="display: flex; align-items: center; gap: 6px; margin-left: auto; flex-shrink: 0;">
+          <div class="select-wrap select-wrap-compact">
+            <select id="sort-select" class="select select-compact" onchange="changeSort(this.value)">
+              <option value="date_added:desc">Newest Added</option>
+              <option value="date_added:asc">Oldest Added</option>
+              <option value="title:asc">Title (A-Z)</option>
+              <option value="title:desc">Title (Z-A)</option>
+              <option value="pagecount:desc">Pages (High to Low)</option>
+            </select>
+            <svg style="width: 11px; height: 11px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+          <!-- Density Toggle -->
+          <button class="btn btn-secondary btn-icon" id="btn-view-toggle" title="Toggle Grid Density" onclick="toggleDensity()" style="height: 28px; width: 28px;">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="bottom-nav-inner">
+      <button class="nav-tab active" id="nav-tab-library" onclick="switchMainView('library')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+        Library
+      </button>
+      <button class="nav-tab" id="nav-tab-explore" onclick="switchMainView('explore')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+        Browse Tags
+      </button>
+      <button class="nav-tab" id="nav-tab-history" onclick="switchMainView('history')">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        History
+      </button>
+      <button class="nav-tab" onclick="triggerRandom()">
+        <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.5-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>
+        Random
+      </button>
+    </nav>
+  </footer>
+
+  <script>
+
+    // =========================================================================
+    // Tag Autocomplete / Recommendations (Native LANraragi Style)
+    // =========================================================================
+    let allDatabaseTags = [];
+    const searchSuggestionsBox = document.getElementById("search-suggestions");
+
+    async function preloadDatabaseTags() {
+      if (allDatabaseTags.length > 0) return;
+      try {
+        const res = await fetch("/api/database/stats");
+        const data = await res.json();
+        // Exclude source URLs and date_added
+        allDatabaseTags = data.filter(item => {
+          const ns = item.namespace || "";
+          return ns !== "source" && ns !== "date_added";
+        });
+      } catch (e) {
+        console.warn("Error preloading tag stats:", e);
+      }
+    }
+
+    function getActiveSearchToken(inputVal) {
+      if (!inputVal) return { token: "", prefix: "" };
+      const parts = inputVal.split(",");
+      const lastPart = parts[parts.length - 1];
+      const token = lastPart.trim();
+      const prefix = parts.slice(0, -1).join(", ");
+      return { token, prefix };
+    }
+
+    function renderTagSuggestions(token) {
+      if (!searchSuggestionsBox) return;
+      if (!token || token.length < 2 || allDatabaseTags.length === 0) {
+        searchSuggestionsBox.style.display = "none";
+        searchSuggestionsBox.innerHTML = "";
+        return;
+      }
+
+      const q = token.toLowerCase();
+      let matched = [];
+
+      if (q.includes(":")) {
+        const colonIdx = q.indexOf(":");
+        const ns = q.substring(0, colonIdx);
+        const sub = q.substring(colonIdx + 1);
+
+        matched = allDatabaseTags.filter(item => {
+          if ((item.namespace || "").toLowerCase() !== ns) return false;
+          return (item.text || "").toLowerCase().includes(sub);
+        });
+      } else {
+        matched = allDatabaseTags.filter(item => {
+          const text = (item.text || "").toLowerCase();
+          const ns = (item.namespace || "").toLowerCase();
+          return text.includes(q) || (ns && `${ns}:${text}`.includes(q));
+        });
+      }
+
+      if (matched.length === 0) {
+        searchSuggestionsBox.style.display = "none";
+        searchSuggestionsBox.innerHTML = "";
+        return;
+      }
+
+      matched.sort((a, b) => {
+        const aText = (a.text || "").toLowerCase();
+        const bText = (b.text || "").toLowerCase();
+        const aStarts = aText.startsWith(q) || `${a.namespace || ''}:${aText}`.startsWith(q);
+        const bStarts = bText.startsWith(q) || `${b.namespace || ''}:${bText}`.startsWith(q);
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        return (b.weight || 0) - (a.weight || 0);
+      });
+
+      const topSuggestions = matched.slice(0, 8);
+      let html = "";
+      topSuggestions.forEach(item => {
+        const ns = item.namespace || "";
+        const tagText = item.text || "";
+        const fullTag = ns ? `${ns}:${tagText}` : tagText;
+        const nsClass = ns ? `ns-${ns}` : "ns-tag";
+        const nsLabel = ns || "tag";
+
+        html += `
+          <div class="suggestion-item" onclick="selectSearchSuggestion('${escapeJs(fullTag)}')">
+            <div class="suggestion-tag-wrap">
+              <span class="suggestion-ns ${nsClass}">${escapeHtml(nsLabel)}</span>
+              <span>${escapeHtml(tagText)}</span>
+            </div>
+            <span class="suggestion-count">${(item.weight || 1).toLocaleString()}</span>
+          </div>
+        `;
+      });
+
+      searchSuggestionsBox.innerHTML = html;
+      searchSuggestionsBox.style.display = "block";
+    }
+
+    function selectSearchSuggestion(tag) {
+      const currentVal = searchInput.value;
+      const { prefix } = getActiveSearchToken(currentVal);
+      let newVal = "";
+      if (prefix) {
+        newVal = `${prefix}, ${tag}, `;
+      } else {
+        newVal = `${tag}, `;
+      }
+      searchInput.value = newVal;
+      clearBtn.classList.add("visible");
+      searchSuggestionsBox.style.display = "none";
+      searchInput.focus();
+      executeSearch(newVal.trim());
+    }
+
+    document.addEventListener("click", (e) => {
+      if (searchSuggestionsBox && !e.target.closest(".search-box")) {
+        searchSuggestionsBox.style.display = "none";
+      }
+    });
+
+    function updateReaderDirButton() {
+      if (!readerDirBtn) return;
+      if (readingDirection === "RTL") {
+        readerDirBtn.title = "Right-to-Left (Manga)";
+        readerDirBtn.innerHTML = `<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>`;
+      } else {
+        readerDirBtn.title = "Left-to-Right (Western)";
+        readerDirBtn.innerHTML = `<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
+      }
+    }
+
+    function updateSpreadButton() {
+      if (!readerSpreadBtn) return;
+      if (isDoublePage) {
+        readerSpreadBtn.title = "Double Page Spread";
+        readerSpreadBtn.innerHTML = `<svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="13" y="4" width="8" height="16" rx="1.5"/></svg>`;
+      } else {
+        readerSpreadBtn.title = "Single Page";
+        readerSpreadBtn.innerHTML = `<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>`;
+      }
+    }
+
+    // =========================================================================
+    // Reading History & Local Storage Manager
+    // =========================================================================
+    const ReadingHistory = {
+      STORAGE_KEY: "lrr_reading_history",
+
+      getAll() {
+        try {
+          const raw = localStorage.getItem(this.STORAGE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          console.warn("Failed to read reading history:", e);
+          return {};
+        }
+      },
+
+      getProgress(arcid, fallbackItem = null) {
+        if (!arcid) return null;
+        const all = this.getAll();
+        if (all[arcid]) return all[arcid];
+        if (fallbackItem && fallbackItem.progress && fallbackItem.progress > 0) {
+          return {
+            arcid: fallbackItem.arcid,
+            lastPage: fallbackItem.progress,
+            pagecount: fallbackItem.pagecount || 0,
+            title: fallbackItem.title || "",
+            tags: fallbackItem.tags || "",
+            updatedAt: fallbackItem.lastreadtime ? fallbackItem.lastreadtime * 1000 : Date.now()
+          };
+        }
+        return null;
+      },
+
+      saveProgress(arcid, page, pagecount, meta = {}) {
+        if (!arcid || !page) return;
+        try {
+          const all = this.getAll();
+          const existing = all[arcid] || {};
+          let title = meta.title || existing.title;
+          if (!title && currentArchive && currentArchive.arcid === arcid) {
+            title = currentArchive.title;
+          }
+          let tags = meta.tags !== undefined ? meta.tags : existing.tags;
+          if (tags === undefined && currentArchive && currentArchive.arcid === arcid) {
+            tags = currentArchive.tags;
+          }
+          const totalPages = pagecount || existing.pagecount || (currentArchive && currentArchive.arcid === arcid ? currentArchive.pagecount : 0) || 0;
+
+          const updated = {
+            arcid: arcid,
+            lastPage: page,
+            pagecount: totalPages,
+            title: title || "Untitled Manga",
+            tags: tags || "",
+            updatedAt: Date.now()
+          };
+
+          all[arcid] = updated;
+          localStorage.setItem(this.STORAGE_KEY, JSON.stringify(all));
+
+          // Asynchronously sync with LANraragi backend without blocking
+          this.syncBackend(arcid, page);
+        } catch (e) {
+          console.warn("Failed to save reading history:", e);
+        }
+      },
+
+      async syncBackend(arcid, page) {
+        try {
+          await fetch(`/api/archives/${arcid}/progress/${page}`, { method: 'PUT' });
+        } catch (err) {
+          console.debug("Backend progress sync failed:", err);
+        }
+      },
+
+      removeProgress(arcid) {
+        if (!arcid) return;
+        try {
+          const all = this.getAll();
+          if (all[arcid]) {
+            delete all[arcid];
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(all));
+          }
+        } catch (e) {
+          console.warn("Failed to remove progress:", e);
+        }
+      },
+
+      clearAll() {
+        try {
+          localStorage.removeItem(this.STORAGE_KEY);
+        } catch (e) {
+          console.warn("Failed to clear reading history:", e);
+        }
+      },
+
+      getList() {
+        const all = this.getAll();
+        return Object.values(all).sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+      }
+    };
+
+    // =========================================================================
+    // Application State
+    // =========================================================================
+    let currentSearch = "";
+    let currentLanguage = "";
+    let currentPageNum = 1;
+    const PAGE_SIZE = 24;
+    let totalRecords = 0;
+    let totalPages = 1;
+    let isLoading = false;
+    let isDense = false;
+    let currentSortBy = "date_added";
+    let currentSortOrder = "desc";
+
+    // Reader State
+    let currentArchive = null;
+    let currentReaderArcId = null;
+    let currentPages = [];
+    let currentPageIndex = 0;
+    let isWebtoonMode = false;
+    let isOverlayVisible = true;
+    let readingDirection = "RTL"; // Standard Japanese manga right-to-left
+    let isDoublePage = false;
+
+    // Taxonomy State
+    let rawTaxonomyStats = [];
+    let currentTaxonomyNamespace = "artist";
+    let taxonomyFilterQuery = "";
+
+    // DOM Elements
+    const mangaGrid = document.getElementById("manga-grid");
+    const searchInput = document.getElementById("search-input");
+    const clearBtn = document.getElementById("clear-search-btn");
+    const loadingSentinel = document.getElementById("loading-sentinel");
+    const libraryCountText = document.getElementById("library-count-text");
+    const currentFilterBadge = document.getElementById("current-filter-badge");
+    const currentFilterText = document.getElementById("current-filter-text");
+    const sheet = document.getElementById("sheet");
+    const sheetBackdrop = document.getElementById("sheet-backdrop");
+    const sheetContent = document.getElementById("sheet-content");
+
+    // Reader Elements
+    const readerModal = document.getElementById("reader-modal");
+    const readerTitle = document.getElementById("reader-title");
+    const readerBottom = document.getElementById("reader-bottom");
+    const pagedView = document.getElementById("paged-view");
+    const webtoonView = document.getElementById("webtoon-view");
+    const pagedSpreadWrap = document.getElementById("paged-spread-wrap");
+    const pagedImgLeft = document.getElementById("paged-img-left");
+    const pagedImgRight = document.getElementById("paged-img-right");
+    const scrubberSlider = document.getElementById("scrubber-slider");
+    const scrubberCounter = document.getElementById("scrubber-counter");
+    const readerModeBtn = document.getElementById("reader-mode-btn");
+    const readerDirBtn = document.getElementById("reader-dir-btn");
+    const readerSpreadBtn = document.getElementById("reader-spread-btn");
+    const readerGridSheet = document.getElementById("reader-grid-sheet");
+    const gridSheetBody = document.getElementById("grid-sheet-body");
+    const gridSheetTotal = document.getElementById("grid-sheet-total");
+    let gridObserver = null;
+
+    // =========================================================================
+    // Initialization
+    // =========================================================================
+    window.addEventListener("DOMContentLoaded", () => {
+      preloadDatabaseTags();
+      updateReaderDirButton();
+      updateSpreadButton();
+      fetchArchives(1);
+      setupKeyboardControls();
+      setupSwipeGestures();
+      setupSheetGestures();
+    });
+
+    // Toggle Grid Density
+    function toggleDensity() {
+      isDense = !isDense;
+      if (isDense) {
+        mangaGrid.classList.remove("grid-comfortable");
+        mangaGrid.classList.add("grid-dense");
+      } else {
+        mangaGrid.classList.remove("grid-dense");
+        mangaGrid.classList.add("grid-comfortable");
+      }
+    }
+
+    // Main View Switching (Library vs Explore vs History)
+    function switchMainView(viewName) {
+      document.querySelectorAll(".view-pane").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+      const footPagination = document.getElementById("footer-pagination-wrap");
+      const footSearchWrap = document.querySelector(".footer-search-wrap");
+
+      if (viewName === "library") {
+        document.getElementById("view-library").classList.add("active");
+        document.getElementById("nav-tab-library").classList.add("active");
+        if (footPagination) footPagination.style.display = "flex";
+        if (footSearchWrap) footSearchWrap.style.display = "flex";
+      } else if (viewName === "explore") {
+        document.getElementById("view-explore").classList.add("active");
+        document.getElementById("nav-tab-explore").classList.add("active");
+        if (footPagination) footPagination.style.display = "none";
+        if (footSearchWrap) footSearchWrap.style.display = "flex";
+        loadTaxonomyStats();
+      } else if (viewName === "history") {
+        document.getElementById("view-history").classList.add("active");
+        document.getElementById("nav-tab-history").classList.add("active");
+        if (footPagination) footPagination.style.display = "none";
+        if (footSearchWrap) footSearchWrap.style.display = "none";
+        renderHistoryView();
+      }
+      if (appFooter) appFooter.classList.remove("footer-hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // Search & LANraragi Native Query Parsing
+    // =========================================================================
+    let searchDebounceTimeout = null;
+    function handleSearchInput(val) {
+      clearBtn.classList.toggle("visible", val.length > 0);
+      const { token } = getActiveSearchToken(val);
+      renderTagSuggestions(token);
+      clearTimeout(searchDebounceTimeout);
+      searchDebounceTimeout = setTimeout(() => {
+        executeSearch(val.trim());
+      }, 400);
+    }
+
+    function handleSearchKeyDown(e) {
+      if (e.key === "Enter") {
+        clearTimeout(searchDebounceTimeout);
+        executeSearch(searchInput.value.trim());
+      }
+    }
+
+    function normalizeQuery(q) {
+      if (!q) return "";
+      let s = q.trim();
+      // Map full names to LANraragi database tag codes
+      s = s.replace(/\blanguage:english\b/gi, "language:en");
+      s = s.replace(/\blanguage:japanese\b/gi, "language:ja");
+      s = s.replace(/\blanguage:chinese\b/gi, "language:zh");
+      // Auto-insert comma between namespace tokens if separated only by space (e.g. artist:alp language:en)
+      s = s.replace(/([^\s,])\s+((?:language|artist|group|character|parody|series|publisher|source):)/gi, "$1, $2");
+      return s;
+    }
+
+    function executeSearch(query) {
+      currentSearch = query;
+      updateFilterBadge();
+      goToPage(1);
+    }
+
+    function clearSearch() {
+      searchInput.value = "";
+      clearBtn.classList.remove("visible");
+      currentSearch = "";
+      currentLanguage = "";
+      document.querySelectorAll(".filter-row .badge").forEach(c => c.classList.remove("active"));
+      const allChip = document.getElementById("filter-chip-all");
+      if (allChip) allChip.classList.add("active");
+      updateFilterBadge();
+      goToPage(1);
+    }
+
+    function applyLanguageFilter(langTag, chipEl) {
+      document.querySelectorAll(".filter-row .badge").forEach(c => c.classList.remove("active"));
+      if (chipEl) {
+        chipEl.classList.add("active");
+      } else {
+        const defaultChip = document.getElementById(langTag ? (langTag === "language:en" ? "filter-chip-en" : "filter-chip-ja") : "filter-chip-all");
+        if (defaultChip) defaultChip.classList.add("active");
+      }
+      currentLanguage = langTag;
+      updateFilterBadge();
+      goToPage(1);
+    }
+
+    function updateFilterBadge() {
+      let activeParts = [];
+      if (currentSearch) activeParts.push(`"${currentSearch}"`);
+      if (currentLanguage) {
+        activeParts.push(currentLanguage === "language:en" ? "English" : (currentLanguage === "language:ja" ? "Japanese" : currentLanguage));
+      }
+
+      if (activeParts.length > 0) {
+        currentFilterText.innerText = activeParts.join(" + ");
+        currentFilterBadge.style.display = "inline-flex";
+      } else {
+        currentFilterBadge.style.display = "none";
+      }
+    }
+
+    function changeSort(val) {
+      const parts = val.split(":");
+      currentSortBy = parts[0];
+      currentSortOrder = parts[1];
+      goToPage(1);
+    }
+
+    // Skeleton Cards Generator for Grid
+    function renderGridSkeletons(count = 10) {
+      mangaGrid.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+      for (let i = 0; i < count; i++) {
+        const card = document.createElement("div");
+        card.className = "manga-card manga-card-skeleton";
+        card.innerHTML = `
+          <div class="card-thumb-wrap skeleton"></div>
+          <div class="card-info" style="display: flex; flex-direction: column; gap: 6px; padding: 10px;">
+            <div class="skeleton" style="height: 13px; width: 85%; border-radius: 4px;"></div>
+            <div class="skeleton" style="height: 11px; width: 55%; border-radius: 4px;"></div>
+            <div class="card-meta" style="margin-top: 4px; display: flex; justify-content: space-between; align-items: center;">
+              <div class="skeleton" style="height: 14px; width: 52px; border-radius: 4px;"></div>
+              <div class="skeleton" style="height: 11px; width: 26px; border-radius: 4px;"></div>
+            </div>
+          </div>
+        `;
+        fragment.appendChild(card);
+      }
+      mangaGrid.appendChild(fragment);
+    }
+
+    // =========================================================================
+    // Fetch Archives from LANraragi Proxy API (Pagination Based)
+    // =========================================================================
+    async function fetchArchives(pageNum = 1) {
+      if (isLoading) return;
+      if (pageNum < 1) pageNum = 1;
+      currentPageNum = pageNum;
+      const startRecord = (currentPageNum - 1) * PAGE_SIZE;
+
+      isLoading = true;
+      if (mangaGrid.children.length > 0 && !mangaGrid.querySelector(".manga-card-skeleton")) {
+        mangaGrid.style.transition = "opacity 0.15s ease";
+        mangaGrid.style.opacity = "0.35";
+        mangaGrid.style.pointerEvents = "none";
+      } else {
+        renderGridSkeletons(10);
+      }
+
+      try {
+        let filterComponents = [];
+        if (currentSearch) filterComponents.push(currentSearch);
+        if (currentLanguage && !currentSearch.toLowerCase().includes("language:")) {
+          filterComponents.push(currentLanguage);
+        }
+        const finalFilter = normalizeQuery(filterComponents.join(", "));
+
+        let url = `/api/search?start=${startRecord}&length=${PAGE_SIZE}&sortby=${currentSortBy}&order=${currentSortOrder}`;
+        if (finalFilter) {
+          url += `&filter=${encodeURIComponent(finalFilter)}`;
+        }
+
+        const res = await fetch(url);
+        const data = await res.json();
+
+        totalRecords = data.recordsFiltered ?? data.recordsTotal ?? 0;
+        totalPages = Math.max(1, Math.ceil(totalRecords / PAGE_SIZE));
+        libraryCountText.innerText = `${totalRecords.toLocaleString()} Archives`;
+
+        updatePaginationUI();
+
+        const rawItems = data.data ?? [];
+        const items = rawItems.slice(0, PAGE_SIZE);
+        if (items.length === 0) {
+          mangaGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--muted);">No manga found matching your query.</div>`;
+          return;
+        }
+
+        renderMangaCards(items);
+      } catch (err) {
+        console.error("Error fetching archives:", err);
+        libraryCountText.innerText = "Error connecting to server";
+        mangaGrid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px 20px; color: var(--muted);">Failed to load page.</div>`;
+      } finally {
+        isLoading = false;
+        mangaGrid.style.opacity = "1";
+        mangaGrid.style.pointerEvents = "auto";
+      }
+    }
+
+    function goToPage(pageNum) {
+      if (isNaN(pageNum) || pageNum < 1) pageNum = 1;
+      if (pageNum > totalPages) pageNum = totalPages;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      fetchArchives(pageNum);
+    }
+
+    function updatePaginationUI() {
+      const pageInput = document.getElementById("page-input");
+      const pageTotalText = document.getElementById("page-total-text");
+      const prevBtn = document.getElementById("page-prev-btn");
+      const nextBtn = document.getElementById("page-next-btn");
+      const firstBtn = document.getElementById("page-first-btn");
+      const lastBtn = document.getElementById("page-last-btn");
+
+      if (pageInput) pageInput.value = currentPageNum;
+      if (pageTotalText) pageTotalText.innerText = totalPages;
+
+      if (prevBtn) prevBtn.disabled = (currentPageNum <= 1);
+      if (firstBtn) firstBtn.disabled = (currentPageNum <= 1);
+      if (nextBtn) nextBtn.disabled = (currentPageNum >= totalPages);
+      if (lastBtn) lastBtn.disabled = (currentPageNum >= totalPages);
+    }
+
+    // Render Cards
+    function renderMangaCards(items) {
+      mangaGrid.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+      items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "manga-card";
+        card.dataset.arcid = item.arcid;
+
+        const tags = (item.tags || "").split(",").map(t => t.trim());
+        let artist = "";
+        let lang = "";
+        tags.forEach(t => {
+          if (t.startsWith("artist:")) artist = t.replace("artist:", "");
+          if (t === "language:english" || t === "language:en") lang = "EN";
+          if (t === "language:japanese" || t === "language:ja") lang = "JA";
+        });
+
+        const thumbUrl = `/api/archives/${item.arcid}/thumbnail`;
+        const prog = ReadingHistory.getProgress(item.arcid, item);
+        const hasProgress = prog && prog.lastPage > 1;
+        const totalP = item.pagecount || (prog ? prog.pagecount : 0) || 0;
+        const percent = (hasProgress && totalP > 0) ? Math.min(100, Math.round((prog.lastPage / totalP) * 100)) : 0;
+
+        card.innerHTML = `
+          <div class="card-thumb-wrap">
+            <img class="card-thumb" src="${thumbUrl}" loading="lazy" alt="${escapeHtml(item.title)}">
+            ${lang ? `<span class="card-badge-top">${lang}</span>` : ""}
+            ${hasProgress ? `<div class="card-progress-bar"><div class="card-progress-fill" style="width: ${percent}%;"></div></div>` : ""}
+          </div>
+          <div class="card-info">
+            <div class="card-title" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div>
+            <div class="card-meta">
+              <span class="artist-badge">${escapeHtml(artist || "Unknown")}</span>
+              ${hasProgress 
+                ? `<span class="progress-badge">p. ${prog.lastPage}/${totalP || "?"}</span>` 
+                : `<span>${item.pagecount || "?"}p</span>`
+              }
+            </div>
+          </div>
+        `;
+
+        card.onclick = () => openDrawer(item);
+        fragment.appendChild(card);
+      });
+      mangaGrid.appendChild(fragment);
+    }
+
+    // =========================================================================
+    // Dedicated Taxonomy / Browse Page Logic
+    // =========================================================================
+    async function loadTaxonomyStats() {
+      if (rawTaxonomyStats.length > 0) {
+        renderTaxonomy();
+        return;
+      }
+      try {
+        const res = await fetch("/api/database/stats");
+        rawTaxonomyStats = await res.json();
+        renderTaxonomy();
+      } catch (err) {
+        document.getElementById("taxonomy-grid").innerHTML = `<div style="color: var(--muted); padding: 20px;">Failed to load tags taxonomy.</div>`;
+      }
+    }
+
+    function switchTaxonomyNamespace(ns, btnEl) {
+      document.querySelectorAll(".taxonomy-tabs .badge").forEach(b => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      currentTaxonomyNamespace = ns;
+      document.getElementById("taxonomy-search-input").value = "";
+      taxonomyFilterQuery = "";
+      renderTaxonomy();
+    }
+
+    function filterTaxonomyList(query) {
+      taxonomyFilterQuery = query.toLowerCase().trim();
+      renderTaxonomy();
+    }
+
+    function renderTaxonomy() {
+      const container = document.getElementById("taxonomy-grid");
+      const sortType = document.getElementById("taxonomy-sort-select").value;
+
+      // Filter by current namespace (excluding date_added and source URLs)
+      let filtered = rawTaxonomyStats.filter(item => {
+        const ns = item.namespace || "";
+        if (ns === "date_added" || ns === "source") return false;
+        return ns === currentTaxonomyNamespace;
+      });
+
+      // Filter by user input
+      if (taxonomyFilterQuery) {
+        filtered = filtered.filter(item => (item.text || "").toLowerCase().includes(taxonomyFilterQuery));
+      }
+
+      // Sort
+      if (sortType === "count") {
+        filtered.sort((a, b) => (b.weight || 0) - (a.weight || 0));
+      } else {
+        filtered.sort((a, b) => (a.text || "").localeCompare(b.text || ""));
+      }
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div style="color: var(--muted); padding: 30px; width: 100%; text-align: center;">No items found.</div>`;
+        return;
+      }
+
+      // Limit to 400 for snappy DOM rendering
+      const displayItems = filtered.slice(0, 400);
+      container.innerHTML = displayItems.map(item => {
+        const fullTag = item.namespace ? `${item.namespace}:${item.text}` : item.text;
+        // Search format: exact match with $ if namespace like artist or group
+        const queryTag = (item.namespace === "artist" || item.namespace === "group") ? `${item.namespace}:${item.text}$` : fullTag;
+        return `
+          <div class="tag-pill" onclick="selectTaxonomyTag('${escapeJs(queryTag)}')">
+            <span>${escapeHtml(item.text)}</span>
+            <span class="count">${item.weight}</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function selectTaxonomyTag(tagQuery) {
+      searchInput.value = tagQuery;
+      clearBtn.classList.toggle("visible", true);
+      switchMainView("library");
+      executeSearch(tagQuery);
+    }
+
+    // =========================================================================
+    // Archive Detail Sheet (Drawer)
+    // =========================================================================
+    function openDrawer(item) {
+      currentArchive = item;
+      document.body.classList.add("modal-open");
+      const tags = (item.tags || "").split(",").map(t => t.trim()).filter(Boolean);
+      const thumbUrl = `/api/archives/${item.arcid}/thumbnail`;
+
+      const grouped = { artist: [], group: [], language: [], character: [], parody: [], general: [] };
+      tags.forEach(t => {
+        if (t.startsWith("artist:")) grouped.artist.push(t);
+        else if (t.startsWith("group:")) grouped.group.push(t);
+        else if (t.startsWith("language:")) grouped.language.push(t);
+        else if (t.startsWith("character:")) grouped.character.push(t);
+        else if (t.startsWith("parody:")) grouped.parody.push(t);
+        else if (!t.startsWith("date_added:") && !t.startsWith("source:")) grouped.general.push(t);
+      });
+
+      let tagsHtml = "";
+      for (const [category, tagList] of Object.entries(grouped)) {
+        if (tagList.length > 0) {
+          tagsHtml += `
+            <div>
+              <div class="tag-category-title">${category}</div>
+              <div class="tag-chips-wrap">
+                ${tagList.map(t => `<span class="badge" onclick="searchByTag('${escapeJs(t)}')">${escapeHtml(t)}</span>`).join("")}
+              </div>
+            </div>
+          `;
+        }
+      }
+
+      // Check reading progress
+      const progress = ReadingHistory.getProgress(item.arcid, item);
+      const totalPages = item.pagecount || (progress ? progress.pagecount : 0) || 0;
+      const hasProgress = progress && progress.lastPage > 1;
+
+      let actionButtonsHtml = "";
+      let progressSummaryHtml = "";
+
+      if (hasProgress) {
+        const percent = totalPages > 0 ? Math.min(100, Math.round((progress.lastPage / totalPages) * 100)) : 0;
+        progressSummaryHtml = `
+          <div class="drawer-progress-box">
+            <div class="drawer-progress-header">
+              <span>Reading Progress</span>
+              <strong>Page ${progress.lastPage} of ${totalPages || "?"} (${percent}%)</strong>
+            </div>
+            <div class="drawer-progress-bar">
+              <div class="drawer-progress-fill" style="width: ${percent}%;"></div>
+            </div>
+          </div>
+        `;
+        actionButtonsHtml = `
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn btn-default" style="width: 100%;" onclick="openReader('${item.arcid}', ${progress.lastPage})">
+              <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Resume (Page ${progress.lastPage})
+            </button>
+            <button class="btn btn-outline" style="width: 100%;" onclick="openReader('${item.arcid}', 1)">
+              <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+              Read from Beginning
+            </button>
+          </div>
+        `;
+      } else {
+        actionButtonsHtml = `
+          <button class="btn btn-default" style="width: 100%;" onclick="openReader('${item.arcid}', 1)">
+            <svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Start Reading
+          </button>
+        `;
+      }
+
+      sheetContent.innerHTML = `
+        <div class="detail-header" style="position: relative;">
+          <button class="sheet-close-btn" onclick="closeDrawer()" title="Close details" aria-label="Close">✕</button>
+          <img class="detail-thumb" src="${thumbUrl}" alt="Cover">
+          <div class="detail-info" style="padding-right: 28px;">
+            <div class="detail-title">${escapeHtml(item.title)}</div>
+            <div style="font-size: 12px; color: var(--muted-foreground);">
+              ${item.pagecount || "?"} pages &bull; ${formatBytes(item.arcsize || item.size)}
+            </div>
+            ${progressSummaryHtml}
+            ${actionButtonsHtml}
+            <div>
+              <a href="/api/archives/${item.arcid}/download" download class="btn btn-secondary" style="width: 100%;">
+                <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Download CBZ
+              </a>
+            </div>
+          </div>
+        </div>
+        <div style="border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+          ${tagsHtml}
+        </div>
+      `;
+
+      sheet.classList.add("open");
+      sheetBackdrop.classList.add("open");
+    }
+
+    function closeDrawer() {
+      sheet.style.transform = "";
+      sheet.style.transition = "";
+      sheetBackdrop.style.opacity = "";
+      sheetBackdrop.style.transition = "";
+      sheet.classList.remove("open", "dragging");
+      sheetBackdrop.classList.remove("open", "dragging");
+      document.body.classList.remove("modal-open");
+    }
+
+    function setupSheetGestures() {
+      let touchStartY = 0;
+      let touchStartX = 0;
+      let currentDeltaY = 0;
+      let isDragging = false;
+      let canDrag = false;
+
+      sheet.addEventListener("touchstart", (e) => {
+        if (!sheet.classList.contains("open") || e.touches.length !== 1) return;
+        if (window.innerWidth >= 640) return; // Desktop is side panel
+
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+        currentDeltaY = 0;
+        isDragging = false;
+
+        const isHandle = e.target.closest(".sheet-handle-bar");
+        const isAtTop = sheetContent.scrollTop <= 0;
+        canDrag = Boolean(isHandle || isAtTop);
+      }, { passive: true });
+
+      sheet.addEventListener("touchmove", (e) => {
+        if (!canDrag || e.touches.length !== 1) return;
+        if (window.innerWidth >= 640) return;
+
+        const touchY = e.touches[0].clientY;
+        const touchX = e.touches[0].clientX;
+        const deltaY = touchY - touchStartY;
+        const deltaX = Math.abs(touchX - touchStartX);
+
+        if (deltaY > 4 && deltaY > deltaX && sheetContent.scrollTop <= 0) {
+          if (e.cancelable) e.preventDefault();
+          isDragging = true;
+          currentDeltaY = deltaY;
+          sheet.classList.add("dragging");
+          sheetBackdrop.classList.add("dragging");
+          sheet.style.transform = `translateY(${deltaY}px)`;
+          const opacity = Math.max(0, Math.min(1, 1 - (deltaY / 260)));
+          sheetBackdrop.style.opacity = opacity.toString();
+        } else if (deltaY <= 0 && isDragging) {
+          isDragging = false;
+          sheet.classList.remove("dragging");
+          sheetBackdrop.classList.remove("dragging");
+          sheet.style.transform = "";
+          sheetBackdrop.style.opacity = "";
+        }
+      }, { passive: false });
+
+      const handleTouchEnd = () => {
+        if (!isDragging) {
+          canDrag = false;
+          return;
+        }
+        isDragging = false;
+        canDrag = false;
+        sheet.classList.remove("dragging");
+        sheetBackdrop.classList.remove("dragging");
+
+        if (currentDeltaY > 80) {
+          sheet.style.transition = "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)";
+          sheetBackdrop.style.transition = "opacity 0.22s ease";
+          sheet.style.transform = "translateY(100%)";
+          sheetBackdrop.style.opacity = "0";
+          setTimeout(() => {
+            closeDrawer();
+          }, 220);
+        } else {
+          sheet.style.transition = "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)";
+          sheetBackdrop.style.transition = "opacity 0.2s ease";
+          sheet.style.transform = "translateY(0)";
+          sheetBackdrop.style.opacity = "1";
+          setTimeout(() => {
+            sheet.style.transform = "";
+            sheet.style.transition = "";
+            sheetBackdrop.style.opacity = "";
+            sheetBackdrop.style.transition = "";
+          }, 220);
+        }
+      };
+
+      sheet.addEventListener("touchend", handleTouchEnd, { passive: true });
+      sheet.addEventListener("touchcancel", handleTouchEnd, { passive: true });
+    }
+
+    function searchByTag(tag) {
+      closeDrawer();
+      selectTaxonomyTag(tag);
+    }
+
+    // =========================================================================
+    // Fullscreen Modern Reader
+    // =========================================================================
+    async function openReader(arcid, targetPage = 1, title = null) {
+      if (typeof targetPage === "string" && isNaN(Number(targetPage))) {
+        title = targetPage;
+        targetPage = 1;
+      }
+      targetPage = parseInt(targetPage, 10) || 1;
+      currentReaderArcId = arcid;
+
+      if (!title) {
+        if (currentArchive && currentArchive.arcid === arcid && currentArchive.title) {
+          title = currentArchive.title;
+        } else {
+          const prog = ReadingHistory.getProgress(arcid);
+          if (prog && prog.title) title = prog.title;
+        }
+      }
+      readerTitle.innerText = title || "Manga Reader";
+
+      closeDrawer();
+      readerModal.classList.add("active");
+      document.body.classList.add("modal-open");
+      currentPageIndex = 0;
+      isOverlayVisible = true;
+      setOverlayVisibility(true);
+
+      // Automatic default: Paged mode
+      isWebtoonMode = false;
+      if (readerModeBtn) readerModeBtn.innerText = "Paged";
+      if (readerSpreadBtn) readerSpreadBtn.style.display = "inline-flex";
+      pagedView.style.display = "flex";
+      webtoonView.style.display = "none";
+
+      const readerSkeleton = document.getElementById("reader-skeleton");
+      if (readerSkeleton) readerSkeleton.style.display = "flex";
+      pagedSpreadWrap.style.opacity = "0";
+
+      try {
+        const res = await fetch(`/api/archives/${arcid}/files`);
+        const data = await res.json();
+        currentPages = data.pages || [];
+
+        if (scrubberSlider) scrubberSlider.max = currentPages.length;
+
+        if (readerSkeleton) readerSkeleton.style.display = "none";
+        pagedSpreadWrap.style.opacity = "1";
+
+        // Jump to targetPage directly if specified
+        let startIdx = 0;
+        if (targetPage > 1 && currentPages.length > 0) {
+          startIdx = Math.min(targetPage - 1, currentPages.length - 1);
+        }
+        currentPageIndex = startIdx;
+        loadPagedPage(currentPageIndex);
+      } catch (err) {
+        if (readerSkeleton) readerSkeleton.style.display = "none";
+        pagedSpreadWrap.style.opacity = "1";
+        alert("Failed to load archive pages: " + err);
+        closeReader();
+      }
+    }
+
+    function closeReader() {
+      readerModal.classList.remove("active");
+      closeReaderGrid();
+      document.body.classList.remove("modal-open");
+      pagedImgLeft.src = "";
+      pagedImgRight.src = "";
+      pagedImgLeft.classList.remove("skeleton-loading");
+      pagedImgRight.classList.remove("skeleton-loading");
+      const readerSkeleton = document.getElementById("reader-skeleton");
+      if (readerSkeleton) readerSkeleton.style.display = "none";
+      webtoonView.innerHTML = "";
+
+      // Refresh history view or library card progress indicator
+      const activePane = document.querySelector(".view-pane.active");
+      if (activePane && activePane.id === "view-history") {
+        renderHistoryView();
+      } else if (currentReaderArcId) {
+        updateCardProgressUI(currentReaderArcId);
+      }
+    }
+
+    function toggleSpreadMode() {
+      isDoublePage = !isDoublePage;
+      updateSpreadButton();
+      loadPagedPage(currentPageIndex);
+    }
+
+    function loadPagedPage(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= currentPages.length) idx = currentPages.length - 1;
+      currentPageIndex = idx;
+
+      // Update reading history on page turn
+      if (currentReaderArcId && currentPages.length > 0) {
+        ReadingHistory.saveProgress(currentReaderArcId, idx + 1, currentPages.length);
+      }
+
+      if (!isDoublePage) {
+        // Single Page Mode
+        pagedSpreadWrap.classList.remove("double-mode");
+        pagedImgLeft.style.display = "none";
+        pagedImgLeft.src = "";
+        pagedImgLeft.classList.remove("skeleton-loading");
+        pagedImgRight.style.display = "block";
+        pagedImgRight.style.opacity = "0.3";
+        pagedImgRight.classList.add("skeleton-loading");
+        pagedImgRight.src = currentPages[idx];
+        pagedImgRight.onload = () => {
+          pagedImgRight.classList.remove("skeleton-loading");
+          pagedImgRight.style.opacity = "1";
+        };
+        pagedImgRight.onerror = () => {
+          pagedImgRight.classList.remove("skeleton-loading");
+        };
+
+        if (scrubberSlider) scrubberSlider.value = idx + 1;
+        scrubberCounter.innerText = `${idx + 1} / ${currentPages.length}`;
+
+        // Preload next image
+        if (idx + 1 < currentPages.length) {
+          const pre = new Image();
+          pre.src = currentPages[idx + 1];
+        }
+      } else {
+        // Double Page Spread Mode
+        pagedSpreadWrap.classList.add("double-mode");
+        const hasSecondPage = (idx + 1 < currentPages.length);
+
+        if (hasSecondPage) {
+          pagedImgLeft.style.display = "block";
+          pagedImgRight.style.display = "block";
+          pagedImgLeft.style.opacity = "0.3";
+          pagedImgRight.style.opacity = "0.3";
+          pagedImgLeft.classList.add("skeleton-loading");
+          pagedImgRight.classList.add("skeleton-loading");
+
+          if (readingDirection === "RTL") {
+            // Manga standard: Right side is Page idx, Left side is Page idx + 1
+            pagedImgRight.src = currentPages[idx];
+            pagedImgLeft.src = currentPages[idx + 1];
+          } else {
+            // LTR: Left side is Page idx, Right side is Page idx + 1
+            pagedImgLeft.src = currentPages[idx];
+            pagedImgRight.src = currentPages[idx + 1];
+          }
+
+          pagedImgLeft.onload = () => {
+            pagedImgLeft.classList.remove("skeleton-loading");
+            pagedImgLeft.style.opacity = "1";
+          };
+          pagedImgLeft.onerror = () => {
+            pagedImgLeft.classList.remove("skeleton-loading");
+          };
+          pagedImgRight.onload = () => {
+            pagedImgRight.classList.remove("skeleton-loading");
+            pagedImgRight.style.opacity = "1";
+          };
+          pagedImgRight.onerror = () => {
+            pagedImgRight.classList.remove("skeleton-loading");
+          };
+
+          if (scrubberSlider) scrubberSlider.value = idx + 1;
+          scrubberCounter.innerText = `${idx + 1}-${idx + 2} / ${currentPages.length}`;
+
+          // Preload next spread
+          if (idx + 2 < currentPages.length) {
+            const pre1 = new Image(); pre1.src = currentPages[idx + 2];
+            if (idx + 3 < currentPages.length) {
+              const pre2 = new Image(); pre2.src = currentPages[idx + 3];
+            }
+          }
+        } else {
+          // Last page standalone
+          pagedImgLeft.style.display = "none";
+          pagedImgLeft.src = "";
+          pagedImgLeft.classList.remove("skeleton-loading");
+          pagedImgRight.style.display = "block";
+          pagedImgRight.style.opacity = "0.3";
+          pagedImgRight.classList.add("skeleton-loading");
+          pagedImgRight.src = currentPages[idx];
+          pagedImgRight.onload = () => {
+            pagedImgRight.classList.remove("skeleton-loading");
+            pagedImgRight.style.opacity = "1";
+          };
+          pagedImgRight.onerror = () => {
+            pagedImgRight.classList.remove("skeleton-loading");
+          };
+
+          if (scrubberSlider) scrubberSlider.value = idx + 1;
+          scrubberCounter.innerText = `${idx + 1} / ${currentPages.length}`;
+        }
+      }
+    }
+
+    function prevPage() {
+      if (isWebtoonMode) return;
+      const step = isDoublePage ? 2 : 1;
+      if (currentPageIndex > 0) {
+        loadPagedPage(Math.max(0, currentPageIndex - step));
+      }
+    }
+
+    function nextPage() {
+      if (isWebtoonMode) return;
+      const step = isDoublePage ? 2 : 1;
+      if (currentPageIndex + step < currentPages.length) {
+        loadPagedPage(currentPageIndex + step);
+      } else if (isDoublePage && currentPageIndex + 1 < currentPages.length) {
+        loadPagedPage(currentPageIndex + 1);
+      }
+    }
+
+    function jumpToPage(num) {
+      if (isWebtoonMode) {
+        const targetImg = document.getElementById(`webtoon-page-${num - 1}`);
+        if (targetImg) targetImg.scrollIntoView({ behavior: "smooth" });
+      } else {
+        loadPagedPage(num - 1);
+      }
+    }
+
+    function toggleReaderOverlay() {
+      isOverlayVisible = !isOverlayVisible;
+      setOverlayVisibility(isOverlayVisible);
+    }
+
+    function setOverlayVisibility(visible) {
+      if (readerBottom) readerBottom.classList.toggle("hidden", !visible);
+    }
+
+    function toggleReaderMode() {
+      isWebtoonMode = !isWebtoonMode;
+      if (readerModeBtn) readerModeBtn.innerText = isWebtoonMode ? "Webtoon" : "Paged";
+      if (readerSpreadBtn) readerSpreadBtn.style.display = isWebtoonMode ? "none" : "inline-flex";
+
+      if (isWebtoonMode) {
+        pagedView.style.display = "none";
+        webtoonView.style.display = "flex";
+        renderWebtoonView();
+      } else {
+        webtoonView.style.display = "none";
+        pagedView.style.display = "flex";
+        loadPagedPage(currentPageIndex);
+      }
+    }
+
+    function toggleReadingDirection() {
+      readingDirection = (readingDirection === "RTL") ? "LTR" : "RTL";
+      updateReaderDirButton();
+      if (!isWebtoonMode) loadPagedPage(currentPageIndex);
+    }
+
+    function handleTouchLeft() {
+      if (readingDirection === "RTL") {
+        nextPage();
+      } else {
+        prevPage();
+      }
+    }
+
+    function handleTouchRight() {
+      if (readingDirection === "RTL") {
+        prevPage();
+      } else {
+        nextPage();
+      }
+    }
+
+    function renderWebtoonView() {
+      webtoonView.innerHTML = "";
+      currentPages.forEach((url, i) => {
+        const img = document.createElement("img");
+        img.id = `webtoon-page-${i}`;
+        img.src = url;
+        img.loading = "lazy";
+        img.onclick = toggleReaderOverlay;
+        webtoonView.appendChild(img);
+      });
+    }
+
+    // =========================================================================
+    // Reader Thumbnails Grid Sheet ("Library" inside Reader)
+    // =========================================================================
+    function openReaderGrid() {
+      try { history.pushState({ modal: 'readerGrid' }, ''); } catch(e) {}
+      gridSheetTotal.innerText = currentPages.length;
+      gridSheetBody.innerHTML = "";
+
+      if (gridObserver) gridObserver.disconnect();
+      gridObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute("data-src");
+            }
+            gridObserver.unobserve(img);
+          }
+        });
+      }, { root: gridSheetBody, rootMargin: "150px" });
+
+      const fragment = document.createDocumentFragment();
+      currentPages.forEach((pageUrl, idx) => {
+        const card = document.createElement("div");
+        const isActive = (idx === currentPageIndex || (isDoublePage && idx === currentPageIndex + 1));
+        card.className = "page-thumb-card" + (isActive ? " active" : "");
+        card.innerHTML = `
+          <div class="page-thumb-img-wrap skeleton">
+            <img data-src="${pageUrl}" alt="${idx + 1}" decoding="async" style="opacity: 0; transition: opacity 0.2s ease;">
+          </div>
+          <div class="page-num">${idx + 1}</div>
+        `;
+        const img = card.querySelector("img");
+        const wrap = card.querySelector(".page-thumb-img-wrap");
+        img.onload = () => {
+          if (wrap) wrap.classList.remove("skeleton");
+          img.style.opacity = "1";
+        };
+        img.onerror = () => {
+          if (wrap) wrap.classList.remove("skeleton");
+        };
+        gridObserver.observe(img);
+
+        card.onclick = () => {
+          jumpToPage(idx + 1);
+          closeReaderGrid();
+        };
+        fragment.appendChild(card);
+      });
+      gridSheetBody.appendChild(fragment);
+
+      readerGridSheet.classList.add("open");
+
+      // Smooth scroll to current active thumbnail
+      const activeEl = gridSheetBody.querySelector(".page-thumb-card.active");
+      if (activeEl) {
+        setTimeout(() => activeEl.scrollIntoView({ block: "center", behavior: "smooth" }), 60);
+      }
+    }
+
+    function closeReaderGrid() {
+      readerGridSheet.classList.remove("open");
+      if (gridObserver) {
+        gridObserver.disconnect();
+        gridObserver = null;
+      }
+    }
+
+    // Touch Swipe Gestures
+    function setupSwipeGestures() {
+      let touchStartX = 0;
+      let touchStartY = 0;
+      pagedView.addEventListener("touchstart", (e) => {
+        if (e.touches.length === 1) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+        }
+      }, { passive: true });
+
+      pagedView.addEventListener("touchend", (e) => {
+        if (e.changedTouches.length === 1) {
+          const deltaX = e.changedTouches[0].clientX - touchStartX;
+          const deltaY = e.changedTouches[0].clientY - touchStartY;
+          if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+            if (readingDirection === "RTL") {
+              // Manga flow: Swiping to the right advances to next page, swiping left goes back
+              if (deltaX > 0) {
+                nextPage();
+              } else {
+                prevPage();
+              }
+            } else {
+              // Western flow: Swiping left advances to next page, swiping right goes back
+              if (deltaX < 0) {
+                nextPage();
+              } else {
+                prevPage();
+              }
+            }
+          }
+        }
+      }, { passive: true });
+    }
+
+    // Keyboard Shortcuts
+    function setupKeyboardControls() {
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (readerGridSheet && readerGridSheet.classList.contains("open")) {
+            closeReaderGrid();
+            return;
+          }
+          if (readerModal && readerModal.classList.contains("active")) {
+            closeReader();
+            return;
+          }
+          if (sheet && sheet.classList.contains("open")) {
+            closeDrawer();
+            return;
+          }
+        }
+        if (!readerModal || !readerModal.classList.contains("active")) return;
+        if (readerGridSheet && readerGridSheet.classList.contains("open")) return;
+
+        if (e.key === "ArrowRight") {
+          readingDirection === "RTL" ? prevPage() : nextPage();
+        } else if (e.key === "ArrowLeft") {
+          readingDirection === "RTL" ? nextPage() : prevPage();
+        } else if (e.key === " " || e.key === "PageDown") {
+          nextPage();
+        } else if (e.key === "PageUp") {
+          prevPage();
+        }
+      });
+    }
+
+    // Random Archive Action
+    async function triggerRandom() {
+      try {
+        const randomStart = totalRecords > 0 ? Math.floor(Math.random() * totalRecords) : 0;
+        const res = await fetch(`/api/search?start=${randomStart}&length=1`);
+        const data = await res.json();
+        if (data.data && data.data.length > 0) {
+          openDrawer(data.data[0]);
+        }
+      } catch (e) {
+        console.error("Random archive error:", e);
+      }
+    }
+
+    // =========================================================================
+    // History View & Progress UI Helpers
+    // =========================================================================
+    function renderHistoryView() {
+      const container = document.getElementById("history-list");
+      const badge = document.getElementById("history-count-badge");
+      if (!container) return;
+
+      const items = ReadingHistory.getList();
+      if (badge) badge.innerText = `${items.length} ${items.length === 1 ? 'item' : 'items'}`;
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="history-empty-state">
+            <svg style="width: 48px; height: 48px; color: var(--muted);" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <div style="font-size: 15px; font-weight: 600; color: var(--foreground);">No reading history yet</div>
+            <div style="font-size: 13px; max-width: 320px; line-height: 1.4;">
+              Manga you read will automatically be recorded here with your current progress.
+            </div>
+            <button class="btn btn-secondary" onclick="switchMainView('library')" style="margin-top: 8px;">
+              Browse Library
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map(item => {
+        const thumbUrl = `/api/archives/${item.arcid}/thumbnail`;
+        const totalP = item.pagecount || 0;
+        const curP = item.lastPage || 1;
+        const percent = totalP > 0 ? Math.min(100, Math.round((curP / totalP) * 100)) : 0;
+        const timeAgo = formatRelativeTime(item.updatedAt);
+
+        return `
+          <div class="history-card" data-arcid="${item.arcid}">
+            <div class="history-thumb-wrap" onclick="openDrawerFromHistory('${item.arcid}')" title="View details">
+              <img class="history-thumb" src="${thumbUrl}" loading="lazy" alt="${escapeHtml(item.title)}">
+            </div>
+            <div class="history-details">
+              <div class="history-title" onclick="openDrawerFromHistory('${item.arcid}')" title="${escapeHtml(item.title)}">
+                ${escapeHtml(item.title)}
+              </div>
+              <div class="history-meta-row">
+                <span style="font-weight: 500; color: var(--foreground);">Page ${curP} of ${totalP || '?'} (${percent}%)</span>
+                <span>&bull;</span>
+                <span>${timeAgo}</span>
+              </div>
+              <div class="history-progress-track">
+                <div class="history-progress-fill" style="width: ${percent}%;"></div>
+              </div>
+              <div class="history-actions">
+                <button class="btn btn-default" style="height: 28px; font-size: 11.5px; padding: 0 12px; gap: 5px;" onclick="openReader('${item.arcid}', ${curP})">
+                  <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  Resume (p. ${curP})
+                </button>
+                <button class="btn btn-outline" style="height: 28px; font-size: 11.5px; padding: 0 10px; gap: 4px;" onclick="openReader('${item.arcid}', 1)">
+                  <svg style="width: 12px; height: 12px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+                  From Start
+                </button>
+                <button class="btn btn-ghost btn-icon" style="height: 28px; width: 28px; margin-left: auto; color: var(--muted);" title="Remove from history" onclick="removeHistoryItem('${item.arcid}')">
+                  <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function openDrawerFromHistory(arcid) {
+      const prog = ReadingHistory.getProgress(arcid);
+      if (!prog) return;
+      openDrawer({
+        arcid: prog.arcid,
+        title: prog.title,
+        tags: prog.tags || "",
+        pagecount: prog.pagecount || 0
+      });
+    }
+
+    function removeHistoryItem(arcid) {
+      ReadingHistory.removeProgress(arcid);
+      renderHistoryView();
+      updateCardProgressUI(arcid);
+    }
+
+    function clearReadingHistoryPrompt() {
+      if (confirm("Are you sure you want to clear your entire reading history?")) {
+        ReadingHistory.clearAll();
+        renderHistoryView();
+        document.querySelectorAll(".card-progress-bar").forEach(b => b.remove());
+        document.querySelectorAll(".progress-badge").forEach(b => {
+          b.className = "";
+        });
+      }
+    }
+
+    function updateCardProgressUI(arcid) {
+      const card = document.querySelector(`.manga-card[data-arcid="${arcid}"]`);
+      if (!card) return;
+      const prog = ReadingHistory.getProgress(arcid);
+      const thumbWrap = card.querySelector(".card-thumb-wrap");
+      const cardMeta = card.querySelector(".card-meta");
+      if (!thumbWrap || !cardMeta) return;
+
+      const existingBar = thumbWrap.querySelector(".card-progress-bar");
+
+      if (prog && prog.lastPage > 1) {
+        const totalP = prog.pagecount || 0;
+        const pct = totalP > 0 ? Math.min(100, Math.round((prog.lastPage / totalP) * 100)) : 0;
+        if (existingBar) {
+          const fill = existingBar.querySelector(".card-progress-fill");
+          if (fill) fill.style.width = `${pct}%`;
+        } else {
+          const bar = document.createElement("div");
+          bar.className = "card-progress-bar";
+          bar.innerHTML = `<div class="card-progress-fill" style="width: ${pct}%;"></div>`;
+          thumbWrap.appendChild(bar);
+        }
+
+        const pageSpan = cardMeta.querySelector("span:last-child");
+        if (pageSpan) {
+          pageSpan.className = "progress-badge";
+          pageSpan.innerText = `p. ${prog.lastPage}/${totalP || "?"}`;
+        }
+      } else {
+        if (existingBar) existingBar.remove();
+        const pageSpan = cardMeta.querySelector(".progress-badge");
+        if (pageSpan) {
+          pageSpan.className = "";
+          pageSpan.innerText = `${(prog && prog.pagecount) ? prog.pagecount : "?"}p`;
+        }
+      }
+    }
+
+    function formatRelativeTime(ts) {
+      if (!ts) return "";
+      const now = Date.now();
+      const diffSec = Math.floor((now - ts) / 1000);
+      if (diffSec < 60) return "Just now";
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return `${diffMin}m ago`;
+      const diffHours = Math.floor(diffMin / 60);
+      if (diffHours < 24) return `${diffHours}h ago`;
+      const diffDays = Math.floor(diffHours / 24);
+      if (diffDays === 1) return "Yesterday";
+      if (diffDays < 30) return `${diffDays}d ago`;
+      return new Date(ts).toLocaleDateString();
+    }
+
+    // Helpers
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+    function escapeJs(str) {
+      if (!str) return "";
+      return String(str).replace(/'/g, "\'").replace(/"/g, '\"');
+    }
+    function formatBytes(bytes) {
+      if (!bytes || bytes === 0) return "0 B";
+      const k = 1024;
+      const sizes = ["B", "KB", "MB", "GB"];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
+    }
+
+    // =========================================================================
+    // Auto-hide & Auto-show Floating Footer on Scroll
+    // =========================================================================
+    let lastScrollY = window.scrollY;
+    let scrollTicking = false;
+    const appFooter = document.getElementById("app-footer");
+
+    function handleWindowScroll() {
+      const currentScrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      const isAtBottom = (currentScrollY + windowHeight >= docHeight - 40);
+      const isAtTop = (currentScrollY <= 20);
+
+      if (isAtTop || isAtBottom) {
+        if (appFooter) appFooter.classList.remove("footer-hidden");
+      } else if (currentScrollY > lastScrollY + 6 && currentScrollY > 70) {
+        if (appFooter) appFooter.classList.add("footer-hidden");
+      } else if (currentScrollY < lastScrollY - 6) {
+        if (appFooter) appFooter.classList.remove("footer-hidden");
+      }
+      lastScrollY = currentScrollY;
+      scrollTicking = false;
+    }
+
+    window.addEventListener("scroll", () => {
+      if (!scrollTicking) {
+        window.requestAnimationFrame(handleWindowScroll);
+        scrollTicking = true;
+      }
+    }, { passive: true });
+
+
+    // Browser / Hardware Back Navigation (Closes Pages Overview first, then reader, then drawer)
+    window.addEventListener("popstate", (e) => {
+      if (readerGridSheet && readerGridSheet.classList.contains("open")) {
+        closeReaderGrid();
+        return;
+      }
+      if (readerModal && readerModal.classList.contains("active")) {
+        closeReader();
+        return;
+      }
+      if (sheet && sheet.classList.contains("open")) {
+        closeDrawer();
+        return;
+      }
+    });
+
+  </script>
+</body>
+</html>

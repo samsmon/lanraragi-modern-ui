@@ -1,0 +1,25 @@
+services:
+  # LANraragi Modern Mobile Web Frontend
+  lanraragi-web:
+    image: nginx:alpine
+    container_name: lanraragi-web
+    restart: unless-stopped
+    ports:
+      - "8125:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - lanraragi
+
+  # Existing LANraragi Server (Reference)
+  lanraragi:
+    image: difegue/lanraragi:latest
+    container_name: lanraragi
+    restart: unless-stopped
+    ports:
+      - "8123:3000"
+    volumes:
+      - /mnt/manga/content:/home/koyomi/lanraragi/content:ro
+      - ./database:/home/koyomi/lanraragi/database
+      - ./thumb:/home/koyomi/lanraragi/thumb
