@@ -178,6 +178,8 @@ function clearSearch() {
   if (!searchInput) searchInput = document.getElementById("search-input");
   if (!clearBtn) clearBtn = document.getElementById("clear-search-btn");
   if (searchInput) searchInput.value = "";
+  const dtInput = document.getElementById("desktop-search-input");
+  if (dtInput) dtInput.value = "";
   if (clearBtn) clearBtn.classList.remove("visible");
   currentSearch = "";
   currentLanguage = "";
@@ -486,6 +488,8 @@ function selectTaxonomyTag(tagQuery) {
   if (!searchInput) searchInput = document.getElementById("search-input");
   if (!clearBtn) clearBtn = document.getElementById("clear-search-btn");
   if (searchInput) searchInput.value = tagQuery;
+  const dtInput = document.getElementById("desktop-search-input");
+  if (dtInput) dtInput.value = tagQuery;
   if (clearBtn) clearBtn.classList.toggle("visible", true);
   switchMainView("library");
   executeSearch(tagQuery);
@@ -517,7 +521,7 @@ function openDrawer(item) {
         <div>
           <div class="tag-category-title">${category}</div>
           <div class="tag-chips-wrap">
-            ${tagList.map(t => `<span class="badge" onclick="searchByTag('${escapeJs(t)}')">${escapeHtml(t)}</span>`).join("")}
+            ${tagList.map(t => `<a class="badge" href="?q=${encodeURIComponent(t)}" onclick="handleTagClick(event, '${escapeJs(t)}')">${escapeHtml(t)}</a>`).join("")}
           </div>
         </div>
       `;
@@ -723,8 +727,20 @@ function setupSheetGestures() {
   sheet.addEventListener("touchcancel", handleTouchEnd, { passive: true });
 }
 
+function handleTagClick(e, tag) {
+  if (e.ctrlKey || e.metaKey || e.button === 1) return;
+  e.preventDefault();
+  searchByTag(tag);
+}
+
 function searchByTag(tag) {
   closeDrawer();
+  if (typeof closeReader === "function") {
+    const readerModal = document.getElementById("reader-modal");
+    if (readerModal && readerModal.classList.contains("active")) {
+      closeReader(false);
+    }
+  }
   selectTaxonomyTag(tag);
 }
 
