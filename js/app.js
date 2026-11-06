@@ -328,9 +328,10 @@ function renderMangaCards(items) {
   mangaGrid.innerHTML = "";
   const fragment = document.createDocumentFragment();
   items.forEach(item => {
-    const card = document.createElement("div");
+    const card = document.createElement("a");
     card.className = "manga-card";
     card.dataset.arcid = item.arcid;
+    card.href = `?id=${encodeURIComponent(item.arcid)}`;
 
     const tags = (item.tags || "").split(",").map(t => t.trim());
     let artist = "";
@@ -365,7 +366,13 @@ function renderMangaCards(items) {
       </div>
     `;
 
-    card.onclick = () => openDrawer(item);
+    card.addEventListener("click", (e) => {
+      if (e.ctrlKey || e.metaKey || e.button === 1) {
+        return;
+      }
+      e.preventDefault();
+      openDrawer(item);
+    });
     fragment.appendChild(card);
   });
   mangaGrid.appendChild(fragment);
@@ -582,6 +589,14 @@ function closeDrawer() {
     sheetBackdrop.classList.remove("open", "dragging");
   }
   document.body.classList.remove("modal-open");
+  if (window.history && window.history.replaceState) {
+    const url = new URL(window.location);
+    if (url.searchParams.has("id")) {
+      url.searchParams.delete("id");
+      const cleanUrl = url.pathname + (url.search ? url.search : "") + url.hash;
+      window.history.replaceState({}, "", cleanUrl);
+    }
+  }
 }
 
 function setupSheetGestures() {
