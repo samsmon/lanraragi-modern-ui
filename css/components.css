@@ -325,7 +325,7 @@
       background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(4px);
       -webkit-backdrop-filter: blur(4px);
-      z-index: 900;
+      z-index: 1200;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease;
@@ -344,7 +344,7 @@
       border-top: 1px solid var(--border);
       border-top-left-radius: var(--radius-lg);
       border-top-right-radius: var(--radius-lg);
-      z-index: 901;
+      z-index: 1201;
       max-height: 85vh;
       display: flex;
       flex-direction: column;

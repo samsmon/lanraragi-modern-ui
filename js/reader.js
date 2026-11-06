@@ -1,3 +1,24 @@
+// Open full manga info drawer from inside reader
+async function openCurrentReaderInfo() {
+  if (!currentReaderArcId) return;
+  if (typeof currentArchive !== "undefined" && currentArchive && currentArchive.arcid === currentReaderArcId && currentArchive.tags) {
+    if (typeof openDrawer === "function") openDrawer(currentArchive);
+    return;
+  }
+  try {
+    const res = await fetch(`/api/archives/${encodeURIComponent(currentReaderArcId)}/metadata`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data) {
+      if (!data.arcid) data.arcid = currentReaderArcId;
+      currentArchive = data;
+      if (typeof openDrawer === "function") openDrawer(data);
+    }
+  } catch (err) {
+    console.debug("Failed to load metadata for reader info:", err);
+  }
+}
+
 // =========================================================================
 // Fullscreen Modern Reader
 // =========================================================================
@@ -402,6 +423,8 @@ function openReaderGrid() {
   });
   gridSheetBody.appendChild(fragment);
 
+  const gridBackdrop = document.getElementById("reader-grid-backdrop");
+  if (gridBackdrop) gridBackdrop.classList.add("open");
   if (readerGridSheet) readerGridSheet.classList.add("open");
 
   const activeEl = gridSheetBody.querySelector(".page-thumb-card.active");
@@ -411,6 +434,8 @@ function openReaderGrid() {
 }
 
 function closeReaderGrid() {
+  const gridBackdrop = document.getElementById("reader-grid-backdrop");
+  if (gridBackdrop) gridBackdrop.classList.remove("open");
   const readerGridSheet = document.getElementById("reader-grid-sheet");
   if (readerGridSheet) readerGridSheet.classList.remove("open");
   if (gridObserver) {
