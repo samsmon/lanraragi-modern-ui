@@ -714,9 +714,14 @@ function setupKeyboardControls() {
   window.addEventListener("keydown", (e) => {
     const readerGridSheet = document.getElementById("reader-grid-sheet");
     const readerModal = document.getElementById("reader-modal");
+    const readerSettingsDialog = document.getElementById("reader-settings-dialog");
     if (!sheet) sheet = document.getElementById("sheet");
 
     if (e.key === "Escape") {
+      if (readerSettingsDialog && readerSettingsDialog.style.display !== "none") {
+        if (typeof toggleReaderSettings === "function") toggleReaderSettings();
+        return;
+      }
       if (readerGridSheet && readerGridSheet.classList.contains("open")) {
         if (typeof closeReaderGrid === "function") closeReaderGrid();
         return;
@@ -732,12 +737,13 @@ function setupKeyboardControls() {
     }
     if (!readerModal || !readerModal.classList.contains("active")) return;
     if (readerGridSheet && readerGridSheet.classList.contains("open")) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
 
     if (typeof readingDirection !== "undefined") {
-      if (e.key === "ArrowRight") {
-        readingDirection === "RTL" ? prevPage() : nextPage();
-      } else if (e.key === "ArrowLeft") {
+      if (e.key === "a" || e.key === "A" || e.key === "ArrowLeft") {
         readingDirection === "RTL" ? nextPage() : prevPage();
+      } else if (e.key === "d" || e.key === "D" || e.key === "ArrowRight") {
+        readingDirection === "RTL" ? prevPage() : nextPage();
       } else if (e.key === " " || e.key === "PageDown") {
         nextPage();
       } else if (e.key === "PageUp") {

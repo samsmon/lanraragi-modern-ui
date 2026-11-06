@@ -104,13 +104,9 @@ a.manga-card {
     gap: 10px;
   }
 
-  .card-thumb-wrap {
-    height: 250px;
-  }
+  .card-thumb-wrap { height: 250px; }
 
-  .grid-dense .card-thumb-wrap {
-    height: 195px;
-  }
+  .grid-dense .card-thumb-wrap { height: 195px; }
 
   /* Centered Modal Dialog on Desktop */
   .sheet {
@@ -142,9 +138,7 @@ a.manga-card {
     pointer-events: auto;
   }
 
-  .sheet-handle-bar {
-    display: none;
-  }
+  .sheet-handle-bar { display: none; }
 
   .sheet-content {
     max-height: 85vh;
@@ -177,12 +171,113 @@ a.manga-card {
   }
 
   /* Ergonomic History Layout */
-  .history-list {
-    max-width: 960px;
-    margin: 0;
+  .history-list { max-width: 960px; margin: 0; }
+
+  .explore-header { max-width: 1080px; }
+
+  /* Desktop Reader Left Sidebar */
+  #reader-bottom {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: auto;
+    width: 260px;
+    height: 100vh;
+    border-right: 1px solid var(--border);
+    border-top: none;
+    background: #08080a;
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1010;
+    transform: translateX(0);
+    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.85);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .explore-header {
-    max-width: 1080px;
+  #reader-bottom.hidden {
+    transform: translateX(-100%) !important;
+    pointer-events: none;
+  }
+
+  .reader-controls-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .reader-controls-left {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .reader-title {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+  }
+
+  .reader-controls-right {
+    display: flex;
+    gap: 6px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .reader-pager-wrap { flex-direction: column; gap: 10px; width: 100%; }
+
+  /* Reader Settings Dialog */
+  .reader-settings-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    background: #0c0c0e;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.95);
+    z-index: 1025;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 8px;
+  }
+
+  .settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .settings-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--muted-foreground);
   }
 }

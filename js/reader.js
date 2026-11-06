@@ -11,27 +11,107 @@ let isDoublePage = false;
 let gridObserver = null;
 
 function updateReaderDirButton() {
-  const readerDirBtn = document.getElementById("reader-dir-btn");
-  if (!readerDirBtn) return;
-  if (readingDirection === "RTL") {
-    readerDirBtn.title = "Right-to-Left (Manga)";
-    readerDirBtn.innerHTML = `<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>`;
-  } else {
-    readerDirBtn.title = "Left-to-Right (Western)";
-    readerDirBtn.innerHTML = `<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>`;
-  }
+  const btn = document.getElementById("reader-dir-btn");
+  if (!btn) return;
+  const isRtl = readingDirection === "RTL";
+  btn.title = isRtl ? "Right-to-Left (Manga)" : "Left-to-Right (Western)";
+  btn.innerHTML = isRtl
+    ? '<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>'
+    : '<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>';
 }
 
 function updateSpreadButton() {
+  const btn = document.getElementById("reader-spread-btn");
+  if (!btn) return;
+  btn.title = isDoublePage ? "Double Page Spread" : "Single Page";
+  btn.innerHTML = isDoublePage
+    ? '<svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="13" y="4" width="8" height="16" rx="1.5"/></svg>'
+    : '<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>';
+}
+
+function toggleReaderSettings() {
+  const dlg = document.getElementById("reader-settings-dialog");
+  if (!dlg) return;
+  const isHidden = (dlg.style.display === "none" || !dlg.style.display);
+  dlg.style.display = isHidden ? "flex" : "none";
+  if (isHidden) updateReaderSettingsUI();
+}
+
+function updateReaderSettingsUI() {
+  const dirRtl = document.getElementById("setting-dir-rtl");
+  const dirLtr = document.getElementById("setting-dir-ltr");
+  if (dirRtl) dirRtl.classList.toggle("active", readingDirection === "RTL");
+  if (dirLtr) dirLtr.classList.toggle("active", readingDirection === "LTR");
+
+  const spreadSingle = document.getElementById("setting-spread-single");
+  const spreadDouble = document.getElementById("setting-spread-double");
+  if (spreadSingle) spreadSingle.classList.toggle("active", !isDoublePage);
+  if (spreadDouble) spreadDouble.classList.toggle("active", isDoublePage);
+
+  const modePaged = document.getElementById("setting-mode-paged");
+  const modeWebtoon = document.getElementById("setting-mode-webtoon");
+  if (modePaged) modePaged.classList.toggle("active", !isWebtoonMode);
+  if (modeWebtoon) modeWebtoon.classList.toggle("active", isWebtoonMode);
+}
+
+function setReadingDirection(dir) {
+  readingDirection = dir;
+  updateReaderDirButton();
+  updateReaderSettingsUI();
+  if (!isWebtoonMode) renderPagedSpread(currentPageIndex);
+}
+
+function toggleReadingDirection() {
+  setReadingDirection(readingDirection === "RTL" ? "LTR" : "RTL");
+}
+
+function setSpreadMode(isDouble) {
+  isDoublePage = Boolean(isDouble);
+  updateSpreadButton();
+  updateReaderSettingsUI();
+  renderPagedSpread(currentPageIndex);
+}
+
+function toggleSpreadMode() {
+  setSpreadMode(!isDoublePage);
+}
+
+function setReaderMode(mode) {
+  isWebtoonMode = (mode === "webtoon");
+  updateReaderSettingsUI();
+  switchReaderView();
+}
+
+function toggleReaderMode() {
+  setReaderMode(isWebtoonMode ? "paged" : "webtoon");
+}
+
+function switchReaderView() {
+  const readerModeBtn = document.getElementById("reader-mode-btn");
   const readerSpreadBtn = document.getElementById("reader-spread-btn");
-  if (!readerSpreadBtn) return;
-  if (isDoublePage) {
-    readerSpreadBtn.title = "Double Page Spread";
-    readerSpreadBtn.innerHTML = `<svg style="width: 16px; height: 16px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="13" y="4" width="8" height="16" rx="1.5"/></svg>`;
+  const pagedView = document.getElementById("paged-view");
+  const webtoonView = document.getElementById("webtoon-view");
+
+  if (readerModeBtn) readerModeBtn.innerText = isWebtoonMode ? "Webtoon" : "Paged";
+  if (readerSpreadBtn) readerSpreadBtn.style.display = isWebtoonMode ? "none" : "inline-flex";
+
+  if (isWebtoonMode) {
+    if (pagedView) pagedView.style.display = "none";
+    if (webtoonView) {
+      webtoonView.style.display = "flex";
+      renderWebtoonView();
+    }
   } else {
-    readerSpreadBtn.title = "Single Page";
-    readerSpreadBtn.innerHTML = `<svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/></svg>`;
+    if (webtoonView) webtoonView.style.display = "none";
+    if (pagedView) {
+      pagedView.style.display = "flex";
+      renderPagedSpread(currentPageIndex);
+    }
   }
+}
+
+function renderPagedSpread(idx = currentPageIndex) {
+  loadPagedPage(idx);
 }
 
 async function openReader(arcid, targetPage = 1, title = null) {
@@ -43,17 +123,16 @@ async function openReader(arcid, targetPage = 1, title = null) {
   currentReaderArcId = arcid;
 
   if (!title) {
-    if (typeof currentArchive !== "undefined" && currentArchive && currentArchive.arcid === arcid && currentArchive.title) {
+    if (typeof currentArchive !== "undefined" && currentArchive?.arcid === arcid && currentArchive.title) {
       title = currentArchive.title;
     } else {
       const prog = typeof ReadingHistory !== "undefined" ? ReadingHistory.getProgress(arcid) : null;
-      if (prog && prog.title) title = prog.title;
+      title = (prog && prog.title) || "Manga Reader";
     }
   }
 
   const readerTitle = document.getElementById("reader-title");
   if (readerTitle) readerTitle.innerText = title || "Manga Reader";
-
   if (typeof closeDrawer === "function") closeDrawer();
 
   const readerModal = document.getElementById("reader-modal");
@@ -63,20 +142,17 @@ async function openReader(arcid, targetPage = 1, title = null) {
   isOverlayVisible = true;
   setOverlayVisibility(true);
 
-  // Automatic default: Paged mode
   isWebtoonMode = false;
-  const readerModeBtn = document.getElementById("reader-mode-btn");
-  const readerSpreadBtn = document.getElementById("reader-spread-btn");
-  const pagedView = document.getElementById("paged-view");
-  const webtoonView = document.getElementById("webtoon-view");
-  const pagedSpreadWrap = document.getElementById("paged-spread-wrap");
+  switchReaderView();
+  updateReaderDirButton();
+  updateSpreadButton();
+  updateReaderSettingsUI();
 
-  if (readerModeBtn) readerModeBtn.innerText = "Paged";
-  if (readerSpreadBtn) readerSpreadBtn.style.display = "inline-flex";
-  if (pagedView) pagedView.style.display = "flex";
-  if (webtoonView) webtoonView.style.display = "none";
+  const settingsDlg = document.getElementById("reader-settings-dialog");
+  if (settingsDlg) settingsDlg.style.display = "none";
 
   const readerSkeleton = document.getElementById("reader-skeleton");
+  const pagedSpreadWrap = document.getElementById("paged-spread-wrap");
   if (readerSkeleton) readerSkeleton.style.display = "flex";
   if (pagedSpreadWrap) pagedSpreadWrap.style.opacity = "0";
 
@@ -87,11 +163,9 @@ async function openReader(arcid, targetPage = 1, title = null) {
 
     const scrubberSlider = document.getElementById("scrubber-slider");
     if (scrubberSlider) scrubberSlider.max = currentPages.length;
-
     if (readerSkeleton) readerSkeleton.style.display = "none";
     if (pagedSpreadWrap) pagedSpreadWrap.style.opacity = "1";
 
-    // Jump to targetPage directly if specified
     let startIdx = 0;
     if (targetPage > 1 && currentPages.length > 0) {
       startIdx = Math.min(targetPage - 1, currentPages.length - 1);
@@ -110,37 +184,38 @@ function closeReader() {
   const readerModal = document.getElementById("reader-modal");
   if (readerModal) readerModal.classList.remove("active");
   closeReaderGrid();
+  const settingsDlg = document.getElementById("reader-settings-dialog");
+  if (settingsDlg) settingsDlg.style.display = "none";
   document.body.classList.remove("modal-open");
 
-  const pagedImgLeft = document.getElementById("paged-img-left");
-  const pagedImgRight = document.getElementById("paged-img-right");
-  if (pagedImgLeft) {
-    pagedImgLeft.src = "";
-    pagedImgLeft.classList.remove("skeleton-loading");
-  }
-  if (pagedImgRight) {
-    pagedImgRight.src = "";
-    pagedImgRight.classList.remove("skeleton-loading");
-  }
+  const resetImg = (id) => {
+    const el = document.getElementById(id);
+    if (el) { el.src = ""; el.classList.remove("skeleton-loading"); }
+  };
+  resetImg("paged-img-left");
+  resetImg("paged-img-right");
 
   const readerSkeleton = document.getElementById("reader-skeleton");
   if (readerSkeleton) readerSkeleton.style.display = "none";
   const webtoonView = document.getElementById("webtoon-view");
   if (webtoonView) webtoonView.innerHTML = "";
 
-  // Refresh history view or library card progress indicator
   const activePane = document.querySelector(".view-pane.active");
   if (activePane && activePane.id === "view-history") {
     if (typeof renderHistoryView === "function") renderHistoryView();
-  } else if (currentReaderArcId) {
-    if (typeof updateCardProgressUI === "function") updateCardProgressUI(currentReaderArcId);
+  } else if (currentReaderArcId && typeof updateCardProgressUI === "function") {
+    updateCardProgressUI(currentReaderArcId);
   }
 }
 
-function toggleSpreadMode() {
-  isDoublePage = !isDoublePage;
-  updateSpreadButton();
-  loadPagedPage(currentPageIndex);
+function setupImgLoad(img, src) {
+  if (!img) return;
+  img.style.display = "block";
+  img.style.opacity = "0.3";
+  img.classList.add("skeleton-loading");
+  img.onload = () => { img.classList.remove("skeleton-loading"); img.style.opacity = "1"; };
+  img.onerror = () => { img.classList.remove("skeleton-loading"); };
+  img.src = src;
 }
 
 function loadPagedPage(idx) {
@@ -148,7 +223,6 @@ function loadPagedPage(idx) {
   if (idx >= currentPages.length) idx = currentPages.length - 1;
   currentPageIndex = idx;
 
-  // Update reading history on page turn
   if (currentReaderArcId && currentPages.length > 0 && typeof ReadingHistory !== "undefined") {
     ReadingHistory.saveProgress(currentReaderArcId, idx + 1, currentPages.length);
   }
@@ -160,112 +234,33 @@ function loadPagedPage(idx) {
   const scrubberCounter = document.getElementById("scrubber-counter");
 
   if (!isDoublePage) {
-    // Single Page Mode
     if (pagedSpreadWrap) pagedSpreadWrap.classList.remove("double-mode");
-    if (pagedImgLeft) {
-      pagedImgLeft.style.display = "none";
-      pagedImgLeft.src = "";
-      pagedImgLeft.classList.remove("skeleton-loading");
-    }
-    if (pagedImgRight) {
-      pagedImgRight.style.display = "block";
-      pagedImgRight.style.opacity = "0.3";
-      pagedImgRight.classList.add("skeleton-loading");
-      pagedImgRight.src = currentPages[idx];
-      pagedImgRight.onload = () => {
-        pagedImgRight.classList.remove("skeleton-loading");
-        pagedImgRight.style.opacity = "1";
-      };
-      pagedImgRight.onerror = () => {
-        pagedImgRight.classList.remove("skeleton-loading");
-      };
-    }
-
+    if (pagedImgLeft) { pagedImgLeft.style.display = "none"; pagedImgLeft.src = ""; pagedImgLeft.classList.remove("skeleton-loading"); }
+    setupImgLoad(pagedImgRight, currentPages[idx]);
     if (scrubberSlider) scrubberSlider.value = idx + 1;
     if (scrubberCounter) scrubberCounter.innerText = `${idx + 1} / ${currentPages.length}`;
-
-    // Preload next image
-    if (idx + 1 < currentPages.length) {
-      const pre = new Image();
-      pre.src = currentPages[idx + 1];
-    }
+    if (idx + 1 < currentPages.length) new Image().src = currentPages[idx + 1];
   } else {
-    // Double Page Spread Mode
     if (pagedSpreadWrap) pagedSpreadWrap.classList.add("double-mode");
     const hasSecondPage = (idx + 1 < currentPages.length);
 
     if (hasSecondPage) {
-      if (pagedImgLeft) {
-        pagedImgLeft.style.display = "block";
-        pagedImgLeft.style.opacity = "0.3";
-        pagedImgLeft.classList.add("skeleton-loading");
-      }
-      if (pagedImgRight) {
-        pagedImgRight.style.display = "block";
-        pagedImgRight.style.opacity = "0.3";
-        pagedImgRight.classList.add("skeleton-loading");
-      }
-
       if (readingDirection === "RTL") {
-        // Manga standard: Right side is Page idx, Left side is Page idx + 1
-        if (pagedImgRight) pagedImgRight.src = currentPages[idx];
-        if (pagedImgLeft) pagedImgLeft.src = currentPages[idx + 1];
+        setupImgLoad(pagedImgRight, currentPages[idx]);
+        setupImgLoad(pagedImgLeft, currentPages[idx + 1]);
       } else {
-        // LTR: Left side is Page idx, Right side is Page idx + 1
-        if (pagedImgLeft) pagedImgLeft.src = currentPages[idx];
-        if (pagedImgRight) pagedImgRight.src = currentPages[idx + 1];
+        setupImgLoad(pagedImgLeft, currentPages[idx]);
+        setupImgLoad(pagedImgRight, currentPages[idx + 1]);
       }
-
-      if (pagedImgLeft) {
-        pagedImgLeft.onload = () => {
-          pagedImgLeft.classList.remove("skeleton-loading");
-          pagedImgLeft.style.opacity = "1";
-        };
-        pagedImgLeft.onerror = () => {
-          pagedImgLeft.classList.remove("skeleton-loading");
-        };
-      }
-      if (pagedImgRight) {
-        pagedImgRight.onload = () => {
-          pagedImgRight.classList.remove("skeleton-loading");
-          pagedImgRight.style.opacity = "1";
-        };
-        pagedImgRight.onerror = () => {
-          pagedImgRight.classList.remove("skeleton-loading");
-        };
-      }
-
       if (scrubberSlider) scrubberSlider.value = idx + 1;
       if (scrubberCounter) scrubberCounter.innerText = `${idx + 1}-${idx + 2} / ${currentPages.length}`;
-
-      // Preload next spread
       if (idx + 2 < currentPages.length) {
-        const pre1 = new Image(); pre1.src = currentPages[idx + 2];
-        if (idx + 3 < currentPages.length) {
-          const pre2 = new Image(); pre2.src = currentPages[idx + 3];
-        }
+        new Image().src = currentPages[idx + 2];
+        if (idx + 3 < currentPages.length) new Image().src = currentPages[idx + 3];
       }
     } else {
-      // Last page standalone
-      if (pagedImgLeft) {
-        pagedImgLeft.style.display = "none";
-        pagedImgLeft.src = "";
-        pagedImgLeft.classList.remove("skeleton-loading");
-      }
-      if (pagedImgRight) {
-        pagedImgRight.style.display = "block";
-        pagedImgRight.style.opacity = "0.3";
-        pagedImgRight.classList.add("skeleton-loading");
-        pagedImgRight.src = currentPages[idx];
-        pagedImgRight.onload = () => {
-          pagedImgRight.classList.remove("skeleton-loading");
-          pagedImgRight.style.opacity = "1";
-        };
-        pagedImgRight.onerror = () => {
-          pagedImgRight.classList.remove("skeleton-loading");
-        };
-      }
-
+      if (pagedImgLeft) { pagedImgLeft.style.display = "none"; pagedImgLeft.src = ""; pagedImgLeft.classList.remove("skeleton-loading"); }
+      setupImgLoad(pagedImgRight, currentPages[idx]);
       if (scrubberSlider) scrubberSlider.value = idx + 1;
       if (scrubberCounter) scrubberCounter.innerText = `${idx + 1} / ${currentPages.length}`;
     }
@@ -275,9 +270,7 @@ function loadPagedPage(idx) {
 function prevPage() {
   if (isWebtoonMode) return;
   const step = isDoublePage ? 2 : 1;
-  if (currentPageIndex > 0) {
-    loadPagedPage(Math.max(0, currentPageIndex - step));
-  }
+  if (currentPageIndex > 0) loadPagedPage(Math.max(0, currentPageIndex - step));
 }
 
 function nextPage() {
@@ -309,51 +302,12 @@ function setOverlayVisibility(visible) {
   if (readerBottom) readerBottom.classList.toggle("hidden", !visible);
 }
 
-function toggleReaderMode() {
-  isWebtoonMode = !isWebtoonMode;
-  const readerModeBtn = document.getElementById("reader-mode-btn");
-  const readerSpreadBtn = document.getElementById("reader-spread-btn");
-  const pagedView = document.getElementById("paged-view");
-  const webtoonView = document.getElementById("webtoon-view");
-
-  if (readerModeBtn) readerModeBtn.innerText = isWebtoonMode ? "Webtoon" : "Paged";
-  if (readerSpreadBtn) readerSpreadBtn.style.display = isWebtoonMode ? "none" : "inline-flex";
-
-  if (isWebtoonMode) {
-    if (pagedView) pagedView.style.display = "none";
-    if (webtoonView) {
-      webtoonView.style.display = "flex";
-      renderWebtoonView();
-    }
-  } else {
-    if (webtoonView) webtoonView.style.display = "none";
-    if (pagedView) {
-      pagedView.style.display = "flex";
-      loadPagedPage(currentPageIndex);
-    }
-  }
-}
-
-function toggleReadingDirection() {
-  readingDirection = (readingDirection === "RTL") ? "LTR" : "RTL";
-  updateReaderDirButton();
-  if (!isWebtoonMode) loadPagedPage(currentPageIndex);
-}
-
 function handleTouchLeft() {
-  if (readingDirection === "RTL") {
-    nextPage();
-  } else {
-    prevPage();
-  }
+  readingDirection === "RTL" ? nextPage() : prevPage();
 }
 
 function handleTouchRight() {
-  if (readingDirection === "RTL") {
-    prevPage();
-  } else {
-    nextPage();
-  }
+  readingDirection === "RTL" ? prevPage() : nextPage();
 }
 
 function renderWebtoonView() {
@@ -426,7 +380,6 @@ function openReaderGrid() {
 
   if (readerGridSheet) readerGridSheet.classList.add("open");
 
-  // Smooth scroll to current active thumbnail
   const activeEl = gridSheetBody.querySelector(".page-thumb-card.active");
   if (activeEl) {
     setTimeout(() => activeEl.scrollIntoView({ block: "center", behavior: "smooth" }), 60);
@@ -461,19 +414,9 @@ function setupSwipeGestures() {
       const deltaY = e.changedTouches[0].clientY - touchStartY;
       if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
         if (readingDirection === "RTL") {
-          // Manga flow: Swiping to the right advances to next page, swiping left goes back
-          if (deltaX > 0) {
-            nextPage();
-          } else {
-            prevPage();
-          }
+          deltaX > 0 ? nextPage() : prevPage();
         } else {
-          // Western flow: Swiping left advances to next page, swiping right goes back
-          if (deltaX < 0) {
-            nextPage();
-          } else {
-            prevPage();
-          }
+          deltaX < 0 ? nextPage() : prevPage();
         }
       }
     }
