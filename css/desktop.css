@@ -218,7 +218,7 @@ a.manga-card {
     justify-content: flex-start;
   }
 
-  .reader-pager-wrap { flex-direction: column; gap: 10px; width: 100%; }
+  .reader-pager-wrap { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 12px; width: 100%; padding: 6px 0; }
 
   /* Reader Settings Dialog */
   .reader-settings-dialog {
