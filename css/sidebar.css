@@ -121,17 +121,6 @@
     flex-shrink: 0;
   }
 
-  .sidebar-hotkey {
-    font-size: 10px;
-    color: #52525b;
-    font-family: monospace;
-    background: #0c0c0e;
-    border: 1px solid #1e1e22;
-    border-radius: 3px;
-    padding: 1px 5px;
-    line-height: 1.2;
-  }
-
   .sidebar-badge {
     background: #111114;
     border: 1px solid var(--border);
