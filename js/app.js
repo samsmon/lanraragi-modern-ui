@@ -53,12 +53,30 @@ function initDOMElements() {
 // =========================================================================
 // Initialization
 // =========================================================================
+let appInitialized = false;
 function initApp() {
+  if (appInitialized) return;
+  appInitialized = true;
   initDOMElements();
   if (typeof preloadDatabaseTags === "function") preloadDatabaseTags();
   if (typeof updateReaderDirButton === "function") updateReaderDirButton();
   if (typeof updateSpreadButton === "function") updateSpreadButton();
-  fetchArchives(1);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const hasId = urlParams.has("id");
+  const p = !hasId ? parseInt(urlParams.get("page"), 10) : 1;
+  const initialPage = (!isNaN(p) && p >= 1) ? p : 1;
+  const q = urlParams.get("q");
+  if (q) {
+    currentSearch = q;
+    const sInput = document.getElementById("search-input");
+    if (sInput) sInput.value = q;
+    const dtInput = document.getElementById("desktop-search-input");
+    if (dtInput) dtInput.value = q;
+    if (typeof updateFilterBadge === "function") updateFilterBadge();
+  }
+
+  fetchArchives(initialPage);
   setupKeyboardControls();
   if (typeof setupSwipeGestures === "function") setupSwipeGestures();
   setupSheetGestures();
@@ -297,10 +315,18 @@ async function fetchArchives(pageNum = 1) {
   }
 }
 
-function goToPage(pageNum) {
+function goToPage(pageNum, pushHistory = true) {
   if (isNaN(pageNum) || pageNum < 1) pageNum = 1;
-  if (pageNum > totalPages) pageNum = totalPages;
+  if (totalPages > 0 && pageNum > totalPages) pageNum = totalPages;
   window.scrollTo({ top: 0, behavior: "smooth" });
+  if (pushHistory && window.history && window.history.pushState) {
+    const url = new URL(window.location);
+    url.searchParams.set("page", pageNum);
+    if (currentSearch && currentSearch.trim()) url.searchParams.set("q", currentSearch.trim());
+    else url.searchParams.delete("q");
+    url.searchParams.delete("id");
+    window.history.pushState({ type: "library", page: pageNum }, "", url.pathname + url.search);
+  }
   fetchArchives(pageNum);
 }
 
@@ -572,6 +598,13 @@ function openDrawer(item) {
 
   if (sheet) sheet.classList.add("open");
   if (sheetBackdrop) sheetBackdrop.classList.add("open");
+  if (window.history && window.history.pushState && item && item.arcid) {
+    const url = new URL(window.location);
+    if (url.searchParams.get("id") !== item.arcid) {
+      url.searchParams.set("id", item.arcid);
+      window.history.pushState({ type: "drawer", id: item.arcid }, "", url.pathname + url.search);
+    }
+  }
 }
 
 function closeDrawer() {

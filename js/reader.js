@@ -114,7 +114,7 @@ function renderPagedSpread(idx = currentPageIndex) {
   loadPagedPage(idx);
 }
 
-async function openReader(arcid, targetPage = 1, title = null) {
+async function openReader(arcid, targetPage = 1, title = null, pushHistory = true) {
   if (typeof targetPage === "string" && isNaN(Number(targetPage))) {
     title = targetPage;
     targetPage = 1;
@@ -171,6 +171,12 @@ async function openReader(arcid, targetPage = 1, title = null) {
       startIdx = Math.min(targetPage - 1, currentPages.length - 1);
     }
     currentPageIndex = startIdx;
+    if (pushHistory && window.history && window.history.pushState) {
+      const url = new URL(window.location);
+      url.searchParams.set("id", arcid);
+      url.searchParams.set("page", startIdx + 1);
+      window.history.pushState({ type: "reader", id: arcid, page: startIdx + 1 }, "", url.pathname + url.search);
+    }
     loadPagedPage(currentPageIndex);
   } catch (err) {
     if (readerSkeleton) readerSkeleton.style.display = "none";
@@ -180,9 +186,20 @@ async function openReader(arcid, targetPage = 1, title = null) {
   }
 }
 
-function closeReader() {
+function closeReader(pushHistory = true) {
   const readerModal = document.getElementById("reader-modal");
+  const wasActive = readerModal && readerModal.classList.contains("active");
   if (readerModal) readerModal.classList.remove("active");
+  if (wasActive && pushHistory && window.history && window.history.pushState) {
+    const url = new URL(window.location);
+    url.searchParams.delete("id");
+    if (typeof currentPageNum !== "undefined" && currentPageNum > 1) {
+      url.searchParams.set("page", currentPageNum);
+    } else {
+      url.searchParams.delete("page");
+    }
+    window.history.pushState({ type: "library", page: currentPageNum || 1 }, "", url.pathname + (url.search || ""));
+  }
   closeReaderGrid();
   const settingsDlg = document.getElementById("reader-settings-dialog");
   if (settingsDlg) settingsDlg.style.display = "none";
@@ -222,6 +239,13 @@ function loadPagedPage(idx) {
   if (idx < 0) idx = 0;
   if (idx >= currentPages.length) idx = currentPages.length - 1;
   currentPageIndex = idx;
+
+  if (window.history && window.history.replaceState && currentReaderArcId) {
+    const url = new URL(window.location);
+    url.searchParams.set("id", currentReaderArcId);
+    url.searchParams.set("page", idx + 1);
+    window.history.replaceState({ type: "reader", id: currentReaderArcId, page: idx + 1 }, "", url.pathname + url.search);
+  }
 
   if (currentReaderArcId && currentPages.length > 0 && typeof ReadingHistory !== "undefined") {
     ReadingHistory.saveProgress(currentReaderArcId, idx + 1, currentPages.length);

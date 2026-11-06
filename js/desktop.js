@@ -52,15 +52,26 @@ function setupDesktopPagination() {
 
 // Automatically load archive modal when page loads with ?id=...
 async function handleUrlSearchParam() {
-  const arcId = new URLSearchParams(window.location.search).get('id');
+  const params = new URLSearchParams(window.location.search);
+  const arcId = params.get('id');
   if (!arcId) return;
+
+  const pageParam = parseInt(params.get('page'), 10);
   try {
     const res = await fetch(`/api/archives/${encodeURIComponent(arcId)}/metadata`);
     if (!res.ok) return;
     const data = await res.json();
-    if (data) {
-      if (!data.arcid) data.arcid = arcId;
-      if (typeof openDrawer === 'function') openDrawer(data);
+    if (!data) return;
+    if (!data.arcid) data.arcid = arcId;
+
+    if (!isNaN(pageParam) && pageParam >= 1) {
+      if (typeof openReader === 'function') {
+        openReader(arcId, pageParam, data.title, false);
+      }
+    } else {
+      if (typeof openDrawer === 'function') {
+        openDrawer(data, false);
+      }
     }
   } catch (err) {
     console.debug('Failed to load archive from URL id param:', err);
@@ -85,15 +96,54 @@ function hookCloseDrawer() {
     const orig = closeDrawer;
     window.closeDrawer = function () {
       orig();
+      const readerModal = document.getElementById('reader-modal');
+      if (readerModal && readerModal.classList.contains('active')) return;
       if (window.history && window.history.replaceState) {
         const u = new URL(window.location);
         if (u.searchParams.has('id')) {
           u.searchParams.delete('id');
-          window.history.replaceState({}, '', u.pathname + (u.search || '') + u.hash);
+          if (typeof currentPageNum !== 'undefined' && currentPageNum > 1) {
+            u.searchParams.set('page', currentPageNum);
+          }
+          window.history.replaceState({ type: 'library', page: currentPageNum || 1 }, '', u.pathname + (u.search || '') + u.hash);
         }
       }
     };
   }
+}
+
+// Setup popstate listener for back/forward navigation sync
+function setupUrlRouting() {
+  window.addEventListener('popstate', (e) => {
+    const params = new URLSearchParams(window.location.search);
+    const arcId = params.get('id');
+    const pageParam = parseInt(params.get('page'), 10);
+    const targetPage = (!isNaN(pageParam) && pageParam >= 1) ? pageParam : 1;
+
+    const readerModal = document.getElementById('reader-modal');
+    const isReaderOpen = readerModal && readerModal.classList.contains('active');
+    const sheet = document.getElementById('sheet');
+    const isDrawerOpen = sheet && sheet.classList.contains('open');
+
+    if (arcId) {
+      if (params.has('page')) {
+        if (isReaderOpen && typeof currentReaderArcId !== 'undefined' && currentReaderArcId === arcId) {
+          if (typeof loadPagedPage === 'function') loadPagedPage(targetPage - 1);
+        } else {
+          if (typeof openReader === 'function') openReader(arcId, targetPage, null, false);
+        }
+      } else {
+        if (isReaderOpen && typeof closeReader === 'function') closeReader(false);
+        if (!isDrawerOpen && typeof openDrawerFromHistory === 'function') openDrawerFromHistory(arcId);
+      }
+    } else {
+      if (isReaderOpen && typeof closeReader === 'function') closeReader(false);
+      if (isDrawerOpen && typeof closeDrawer === 'function') closeDrawer();
+      if (typeof currentPageNum !== 'undefined' && currentPageNum !== targetPage) {
+        if (typeof goToPage === 'function') goToPage(targetPage, false);
+      }
+    }
+  });
 }
 
 // Register PWA Service Worker
@@ -114,6 +164,7 @@ function initDesktop() {
   syncSidebarHistoryCount();
   registerServiceWorker();
   handleUrlSearchParam();
+  setupUrlRouting();
 
   const historyBadge = document.getElementById('history-count-badge');
   if (historyBadge && window.MutationObserver) {
