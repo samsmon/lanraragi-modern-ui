@@ -1,0 +1,142 @@
+/* ==========================================================================
+   Desktop Responsive Layout & Ergonomics (>= 1024px)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  body {
+    padding-bottom: 30px;
+  }
+
+  /* Main Container shifted for 240px Sidebar */
+  main.main-content {
+    margin-left: 240px;
+    padding-top: 88px;
+    padding-bottom: 40px;
+    padding-left: 28px;
+    padding-right: 28px;
+    max-width: none;
+    min-height: 100vh;
+  }
+
+  /* Footer converted to Sticky Top Header */
+  footer.app-footer {
+    position: fixed;
+    top: 0;
+    bottom: auto;
+    left: 240px;
+    right: 0;
+    height: 72px;
+    border-bottom: 1px solid var(--border);
+    border-top: none;
+    padding: 10px 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transform: none !important;
+    will-change: auto;
+    z-index: 50;
+  }
+
+  footer.app-footer.footer-hidden {
+    transform: none !important;
+  }
+
+  /* Mobile bottom navigation hidden on desktop (managed by sidebar) */
+  .bottom-nav-inner {
+    display: none !important;
+  }
+
+  /* Topbar Search and Filter Section */
+  .footer-search-wrap {
+    flex: 1;
+    max-width: 640px;
+    margin: 0;
+    width: auto;
+    gap: 4px;
+  }
+
+  .footer-search-row {
+    width: 100%;
+  }
+
+  .footer-search-row .input {
+    height: 34px;
+    font-size: 12.5px;
+  }
+
+  .filter-row {
+    padding-top: 1px;
+    gap: 6px;
+  }
+
+  /* Topbar Pagination Controls */
+  .footer-pagination-wrap {
+    border-bottom: none;
+    padding: 0;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    flex-shrink: 0;
+    gap: 6px;
+  }
+
+  /* Desktop Manga Card Grid */
+  .grid-container.grid-comfortable {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .grid-container.grid-dense {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .card-thumb-wrap {
+    height: 250px;
+  }
+
+  .grid-dense .card-thumb-wrap {
+    height: 195px;
+  }
+
+  /* Detail Drawer on Desktop: Sleek Right-side Panel */
+  .sheet {
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: 0;
+    width: 460px;
+    max-height: 100vh;
+    border-top: none;
+    border-left: 1px solid var(--border);
+    border-radius: 0;
+    transform: translateX(100%);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
+  }
+
+  .sheet.open {
+    transform: translateX(0);
+  }
+
+  .sheet-handle-bar {
+    display: none;
+  }
+
+  .sheet-content {
+    height: 100vh;
+    padding: 24px 24px 32px 24px;
+  }
+
+  /* Ergonomic History Layout */
+  .history-list {
+    max-width: 960px;
+    margin: 0;
+  }
+
+  .explore-header {
+    max-width: 1080px;
+  }
+}

@@ -1,64 +1,74 @@
 /* Search Autocomplete Suggestions (LANraragi Style) */
-    .search-suggestions-box {
-      position: absolute;
-      bottom: 100%;
-      left: 0;
-      right: 0;
-      margin-bottom: 8px;
-      background: #09090c;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      max-height: 260px;
-      overflow-y: auto;
-      z-index: 120;
-      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.85);
-      display: none;
-    }
-    .suggestion-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 12px;
-      cursor: pointer;
-      font-size: 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      transition: background 0.1s ease;
-    }
-    .suggestion-item:last-child {
-      border-bottom: none;
-    }
-    .suggestion-item:hover, .suggestion-item.highlighted {
-      background: #16161a;
-    }
-    .suggestion-tag-wrap {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    .suggestion-ns {
-      font-size: 9.5px;
-      font-weight: 600;
-      text-transform: uppercase;
-      padding: 1px 5px;
-      border-radius: 4px;
-      border: 1px solid #27272a;
-      background: #111114;
-      color: #a1a1aa;
-      flex-shrink: 0;
-    }
-    .suggestion-ns.ns-artist { color: #f472b6; border-color: #831843; }
-    .suggestion-ns.ns-character { color: #60a5fa; border-color: #1e3a8a; }
-    .suggestion-ns.ns-group { color: #fbbf24; border-color: #78350f; }
-    .suggestion-ns.ns-series { color: #a78bfa; border-color: #4c1d95; }
-    .suggestion-ns.ns-publisher { color: #34d399; border-color: #064e3b; }
-    .suggestion-ns.ns-tag { color: #e4e4e7; border-color: #3f3f46; }
-    .suggestion-count {
-      font-size: 11px;
-      color: var(--muted);
-      padding-left: 8px;
-      flex-shrink: 0;
-    }
+.search-suggestions-box {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  margin-bottom: 8px;
+  background: #09090c;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  max-height: 260px;
+  overflow-y: auto;
+  z-index: 120;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.85);
+  display: none;
+}
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.1s ease;
+}
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+.suggestion-item:hover, .suggestion-item.highlighted {
+  background: #16161a;
+}
+.suggestion-tag-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.suggestion-ns {
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid #27272a;
+  background: #111114;
+  color: #a1a1aa;
+  flex-shrink: 0;
+}
+.suggestion-ns.ns-artist { color: #f472b6; border-color: #831843; }
+.suggestion-ns.ns-character { color: #60a5fa; border-color: #1e3a8a; }
+.suggestion-ns.ns-group { color: #fbbf24; border-color: #78350f; }
+.suggestion-ns.ns-series { color: #a78bfa; border-color: #4c1d95; }
+.suggestion-ns.ns-publisher { color: #34d399; border-color: #064e3b; }
+.suggestion-ns.ns-tag { color: #e4e4e7; border-color: #3f3f46; }
+.suggestion-count {
+  font-size: 11px;
+  color: var(--muted);
+  padding-left: 8px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .search-suggestions-box {
+    bottom: auto;
+    top: calc(100% + 4px);
+    margin-bottom: 0;
+    margin-top: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85);
+  }
+}
