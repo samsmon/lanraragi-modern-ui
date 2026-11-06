@@ -2,11 +2,6 @@
 // LANraragi Desktop Ergonomics, Hotkeys & State Sync
 // =========================================================================
 
-function isInputElement(el) {
-  if (!el) return false;
-  return el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT' || el.isContentEditable;
-}
-
 // Sync active state between sidebar and navigation views
 function syncSidebarActive(viewName) {
   document.querySelectorAll('.sidebar-nav-item').forEach(i => i.classList.remove('active'));
@@ -24,59 +19,6 @@ function syncSidebarHistoryCount() {
   } catch (err) {
     console.debug('Could not sync history count:', err);
   }
-}
-
-// Desktop Keyboard Shortcuts
-function setupDesktopHotkeys() {
-  window.addEventListener('keydown', (e) => {
-    const readerModal = document.getElementById('reader-modal');
-    if (readerModal && readerModal.classList.contains('active')) return;
-
-    const searchInput = document.getElementById('search-input');
-    const searchSuggestions = document.getElementById('search-suggestions');
-    const sheetEl = document.getElementById('sheet');
-    const isInputFocused = isInputElement(document.activeElement);
-
-    // Escape Key: blur search / dismiss suggestions / close drawer
-    if (e.key === 'Escape') {
-      if (document.activeElement === searchInput) {
-        searchInput.blur();
-        if (searchSuggestions) searchSuggestions.style.display = 'none';
-        return;
-      }
-      if (searchSuggestions && searchSuggestions.style.display !== 'none') {
-        searchSuggestions.style.display = 'none';
-        return;
-      }
-      if (sheetEl && sheetEl.classList.contains('open')) {
-        if (typeof closeDrawer === 'function') closeDrawer();
-        return;
-      }
-    }
-
-    // Quick Search Focus: '/' or Ctrl+K / Cmd+K
-    if ((e.key === '/' && !isInputFocused) || ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K'))) {
-      e.preventDefault();
-      if (searchInput) { searchInput.focus(); searchInput.select(); }
-      return;
-    }
-
-    if (isInputFocused) return;
-
-    // View Switching: '1' -> Library, '2' -> Explore, '3' -> History
-    if (['1', '2', '3'].includes(e.key)) {
-      e.preventDefault();
-      const views = { '1': 'library', '2': 'explore', '3': 'history' };
-      if (typeof switchMainView === 'function') switchMainView(views[e.key]);
-      return;
-    }
-
-    // 'r' or 'R': Trigger random archive drawer
-    if (e.key === 'r' || e.key === 'R') {
-      e.preventDefault();
-      if (typeof triggerRandom === 'function') triggerRandom();
-    }
-  });
 }
 
 // Manage pagination placement based on viewport
@@ -165,7 +107,6 @@ function registerServiceWorker() {
 
 // Initialize Desktop Integration
 function initDesktop() {
-  setupDesktopHotkeys();
   hookViewSwitching();
   hookCloseDrawer();
   setupDesktopPagination();
