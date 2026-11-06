@@ -87,6 +87,7 @@ function toggleDensity() {
 function switchMainView(viewName) {
   document.querySelectorAll(".view-pane").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".sidebar-nav-item").forEach(t => t.classList.remove("active"));
   const footPagination = document.getElementById("footer-pagination-wrap");
   const footSearchWrap = document.querySelector(".footer-search-wrap");
 
@@ -95,6 +96,8 @@ function switchMainView(viewName) {
     const tabLib = document.getElementById("nav-tab-library");
     if (viewLib) viewLib.classList.add("active");
     if (tabLib) tabLib.classList.add("active");
+    const sideLib = document.getElementById("sidebar-nav-library");
+    if (sideLib) sideLib.classList.add("active");
     if (footPagination) footPagination.style.display = "flex";
     if (footSearchWrap) footSearchWrap.style.display = "flex";
   } else if (viewName === "explore") {
@@ -102,6 +105,8 @@ function switchMainView(viewName) {
     const tabExp = document.getElementById("nav-tab-explore");
     if (viewExp) viewExp.classList.add("active");
     if (tabExp) tabExp.classList.add("active");
+    const sideExp = document.getElementById("sidebar-nav-explore");
+    if (sideExp) sideExp.classList.add("active");
     if (footPagination) footPagination.style.display = "none";
     if (footSearchWrap) footSearchWrap.style.display = "flex";
     loadTaxonomyStats();
@@ -110,6 +115,8 @@ function switchMainView(viewName) {
     const tabHist = document.getElementById("nav-tab-history");
     if (viewHist) viewHist.classList.add("active");
     if (tabHist) tabHist.classList.add("active");
+    const sideHist = document.getElementById("sidebar-nav-history");
+    if (sideHist) sideHist.classList.add("active");
     if (footPagination) footPagination.style.display = "none";
     if (footSearchWrap) footSearchWrap.style.display = "none";
     renderHistoryView();
@@ -731,10 +738,12 @@ function setupKeyboardControls() {
 function renderHistoryView() {
   const container = document.getElementById("history-list");
   const badge = document.getElementById("history-count-badge");
+  const sidebarBadge = document.getElementById("sidebar-history-count");
   if (!container) return;
 
   const items = typeof ReadingHistory !== "undefined" ? ReadingHistory.getList() : [];
   if (badge) badge.innerText = `${items.length} ${items.length === 1 ? 'item' : 'items'}`;
+  if (sidebarBadge) sidebarBadge.innerText = items.length;
 
   if (items.length === 0) {
     container.innerHTML = `
@@ -880,6 +889,12 @@ function handleWindowScroll() {
 
   if (!appFooter) appFooter = document.getElementById("app-footer");
   if (!appFooter) return;
+  if (window.innerWidth >= 1024) {
+    appFooter.classList.remove("footer-hidden");
+    lastScrollY = currentScrollY;
+    scrollTicking = false;
+    return;
+  }
 
   if (isAtTop || isAtBottom) {
     appFooter.classList.remove("footer-hidden");

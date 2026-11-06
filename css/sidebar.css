@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Desktop Left Sidebar (AMOLED Zinc Design System)
+   ========================================================================== */
+.app-sidebar {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .app-sidebar {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    background: #08080a;
+    border-right: 1px solid var(--border);
+    z-index: 60;
+    user-select: none;
+  }
+
+  .sidebar-header {
+    height: 72px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--foreground);
+    letter-spacing: -0.3px;
+    text-decoration: none;
+  }
+
+  .sidebar-brand-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: #111114;
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+
+  .sidebar-brand-badge {
+    background: #18181b;
+    color: #a1a1aa;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #27272a;
+    letter-spacing: 0.2px;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 16px 10px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    border-radius: var(--radius-sm);
+    color: var(--muted-foreground);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background: transparent;
+    transition: all 0.15s ease;
+    text-decoration: none;
+    width: 100%;
+    text-align: left;
+    outline: none;
+  }
+
+  .sidebar-nav-item:hover {
+    background: #111114;
+    color: var(--foreground);
+    border-color: var(--border-subtle);
+  }
+
+  .sidebar-nav-item.active {
+    background: #18181b;
+    color: #ffffff;
+    border-color: #27272a;
+    font-weight: 600;
+  }
+
+  .sidebar-nav-item.active svg {
+    stroke: #ffffff;
+  }
+
+  .sidebar-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-nav-left svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-hotkey {
+    font-size: 10px;
+    color: #52525b;
+    font-family: monospace;
+    background: #0c0c0e;
+    border: 1px solid #1e1e22;
+    border-radius: 3px;
+    padding: 1px 5px;
+    line-height: 1.2;
+  }
+
+  .sidebar-badge {
+    background: #111114;
+    border: 1px solid var(--border);
+    color: var(--muted-foreground);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+  }
+
+  .sidebar-nav-item.active .sidebar-badge {
+    background: #27272a;
+    color: #ffffff;
+    border-color: #3f3f46;
+  }
+
+  .sidebar-footer {
+    padding: 14px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .sidebar-ext-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--muted-foreground);
+    font-size: 12px;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: #09090c;
+    transition: all 0.15s ease;
+  }
+
+  .sidebar-ext-link:hover {
+    background: #141418;
+    color: var(--foreground);
+    border-color: #3f3f46;
+  }
+
+  .sidebar-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 4px;
+    font-size: 11px;
+    color: #52525b;
+  }
+}
