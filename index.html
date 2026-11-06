@@ -124,7 +124,7 @@
       <div class="reader-controls-row">
         <div class="reader-controls-left">
           <button class="btn btn-secondary btn-icon" onclick="closeReader()" title="Back to Library"><svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
-          <div class="reader-title" id="reader-title">Manga Title</div>
+          <div class="reader-title" id="reader-title" onclick="openCurrentReaderInfo()" title="View manga info" role="button" tabindex="0">Manga Title</div>
         </div>
         <div class="reader-controls-right">
           <button class="btn btn-secondary btn-icon" onclick="openReaderGrid()" title="Pages Overview / Library"><svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></button>
@@ -163,6 +163,7 @@
     </div>
 
     <!-- Reader Pages Grid Sheet -->
+    <div class="reader-grid-backdrop" id="reader-grid-backdrop" onclick="closeReaderGrid()"></div>
     <div class="reader-grid-sheet" id="reader-grid-sheet">
       <div class="grid-sheet-header">
         <button class="btn btn-secondary btn-icon" onclick="closeReaderGrid()" title="Back to Reader"><svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
