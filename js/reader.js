@@ -198,13 +198,20 @@ function closeReader(pushHistory = true) {
 }
 
 function setupImgLoad(img, src) {
-  if (!img) return;
+  if (!img || !src) return;
   img.style.display = "block";
-  img.style.opacity = "0.3";
-  img.classList.add("skeleton-loading");
-  img.onload = () => { img.classList.remove("skeleton-loading"); img.style.opacity = "1"; };
-  img.onerror = () => img.classList.remove("skeleton-loading");
-  img.src = src;
+  if (img.src === src || img.getAttribute("src") === src) return;
+  if (!img.src || img.src === window.location.href || !img.complete) {
+    img.src = src;
+    img.style.opacity = "1";
+    return;
+  }
+  const pre = new Image();
+  pre.src = src;
+  if (img.src === pre.src) return;
+  const swap = () => { img.src = src; img.style.opacity = "1"; img.classList.remove("skeleton-loading"); };
+  if (typeof pre.decode === "function") pre.decode().then(swap).catch(swap);
+  else pre.onload = pre.onerror = swap;
 }
 
 function loadPagedPage(idx) {
@@ -236,6 +243,7 @@ function loadPagedPage(idx) {
     if (scrubberSlider) scrubberSlider.value = idx + 1;
     if (scrubberCounter) scrubberCounter.innerText = `${idx + 1} / ${currentPages.length}`;
     if (idx + 1 < currentPages.length) new Image().src = currentPages[idx + 1];
+    if (idx - 1 >= 0) new Image().src = currentPages[idx - 1];
   } else {
     if (pagedSpreadWrap) pagedSpreadWrap.classList.add("double-mode");
     const hasSecondPage = (idx + 1 < currentPages.length);
@@ -253,6 +261,8 @@ function loadPagedPage(idx) {
       if (scrubberSlider) scrubberSlider.value = idx + 1;
       if (scrubberCounter) scrubberCounter.innerText = `${idx + 1} / ${currentPages.length}`;
     }
+    if (idx - 1 >= 0) new Image().src = currentPages[idx - 1];
+    if (idx - 2 >= 0) new Image().src = currentPages[idx - 2];
   }
 }
 
@@ -439,24 +449,13 @@ function initReaderSettingsSwipe() {
     isDragging = false;
     dlg.classList.remove("dragging");
     if (bd) bd.classList.remove("dragging");
-    const cleanup = () => {
-      dlg.style.transform = "";
-      dlg.style.transition = "";
-      if (bd) { bd.style.opacity = ""; bd.style.transition = ""; }
-    };
-    if (deltaY > 60) {
-      dlg.style.transition = "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)";
-      if (bd) bd.style.transition = "opacity 0.22s ease";
-      dlg.style.transform = "translateY(100%)";
-      if (bd) bd.style.opacity = "0";
-      setTimeout(() => { toggleReaderSettings(); cleanup(); }, 220);
-    } else {
-      dlg.style.transition = "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)";
-      if (bd) bd.style.transition = "opacity 0.2s ease";
-      dlg.style.transform = "translateY(0)";
-      if (bd) bd.style.opacity = "1";
-      setTimeout(cleanup, 220);
-    }
+    const cleanup = () => { dlg.style.transform = dlg.style.transition = ""; if (bd) bd.style.opacity = bd.style.transition = ""; };
+    const isDismiss = deltaY > 60;
+    dlg.style.transition = isDismiss ? "transform 0.22s cubic-bezier(0.16, 1, 0.3, 1)" : "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)";
+    if (bd) bd.style.transition = "opacity 0.2s ease";
+    dlg.style.transform = isDismiss ? "translateY(100%)" : "translateY(0)";
+    if (bd) bd.style.opacity = isDismiss ? "0" : "1";
+    setTimeout(() => { if (isDismiss) toggleReaderSettings(); cleanup(); }, 220);
   };
 
   dlg.addEventListener("touchend", endDrag, { passive: true });

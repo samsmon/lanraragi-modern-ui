@@ -129,7 +129,6 @@
       height: auto;
       object-fit: contain;
       box-shadow: none;
-      transition: opacity 0.12s ease;
     }
     .double-mode {
       gap: 0 !important;
