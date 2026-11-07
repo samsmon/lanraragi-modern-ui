@@ -170,7 +170,7 @@ async function openReader(arcid, targetPage = 1, title = null, pushHistory = tru
   updateReaderSettingsUI();
 
   const settingsDlg = document.getElementById("reader-settings-dialog");
-  if (settingsDlg) settingsDlg.style.display = "none";
+  if (settingsDlg) settingsDlg.style.display = window.innerWidth >= 1024 ? "flex" : "none";
 
   const readerSkeleton = document.getElementById("reader-skeleton");
   const pagedSpreadWrap = document.getElementById("paged-spread-wrap");
@@ -208,9 +208,7 @@ async function openReader(arcid, targetPage = 1, title = null, pushHistory = tru
 }
 
 function closeReader(pushHistory = true) {
-  const pb = document.getElementById("reader-progress-bar");
   const spb = document.getElementById("reader-screen-progress-bar");
-  if (pb) pb.style.width = "0%";
   if (spb) spb.style.width = "0%";
 
   const readerModal = document.getElementById("reader-modal");
@@ -231,7 +229,7 @@ function closeReader(pushHistory = true) {
   }
   closeReaderGrid();
   const settingsDlg = document.getElementById("reader-settings-dialog");
-  if (settingsDlg) settingsDlg.style.display = "none";
+  if (settingsDlg) settingsDlg.style.display = window.innerWidth >= 1024 ? "flex" : "none";
   document.body.classList.remove("modal-open");
 
   const resetImg = (id) => {
@@ -340,18 +338,8 @@ function nextPage() {
 function updateProgressBar(pageIndex, totalPages) {
   if (!totalPages || totalPages <= 0) return;
   const pct = Math.min(100, Math.max(0, ((pageIndex + 1) / totalPages) * 100));
-  const pb = document.getElementById("reader-progress-bar");
   const spb = document.getElementById("reader-screen-progress-bar");
-  if (pb) pb.style.width = `${pct}%`;
   if (spb) spb.style.width = `${pct}%`;
-}
-
-function seekReaderPage(e) {
-  if (!currentPages || currentPages.length === 0) return;
-  const rect = e.currentTarget.getBoundingClientRect();
-  const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  const target = Math.max(1, Math.min(currentPages.length, Math.round(ratio * currentPages.length)));
-  jumpToPage(target);
 }
 
 function jumpToPage(num) {
