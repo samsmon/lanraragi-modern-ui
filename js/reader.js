@@ -210,7 +210,10 @@ async function openReader(arcid, targetPage = 1, title = null, pushHistory = tru
 function closeReader(pushHistory = true) {
   const readerModal = document.getElementById("reader-modal");
   const wasActive = readerModal && readerModal.classList.contains("active");
-  if (readerModal) readerModal.classList.remove("active");
+  if (readerModal) {
+    readerModal.classList.remove("active");
+    readerModal.classList.remove("sidebar-hidden");
+  }
   if (wasActive && pushHistory && window.history && window.history.pushState) {
     const url = new URL(window.location);
     url.searchParams.delete("id");
@@ -345,6 +348,8 @@ function toggleReaderOverlay() {
 function setOverlayVisibility(visible) {
   const readerBottom = document.getElementById("reader-bottom");
   if (readerBottom) readerBottom.classList.toggle("hidden", !visible);
+  const readerModal = document.getElementById("reader-modal");
+  if (readerModal) readerModal.classList.toggle("sidebar-hidden", !visible);
 }
 
 function handleTouchLeft() {
