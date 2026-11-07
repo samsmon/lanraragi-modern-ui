@@ -91,6 +91,9 @@
       overflow: auto;
       user-select: none;
     }
+    .reader-canvas.webtoon-mode {
+      align-items: flex-start;
+    }
 
     .paged-view {
       display: flex;
@@ -161,11 +164,14 @@
       width: 100%;
       max-width: 900px;
       margin: 0 auto;
+      cursor: pointer;
     }
     .webtoon-view img {
       width: 100%;
       height: auto;
       display: block;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     /* Scrubber Slider */
