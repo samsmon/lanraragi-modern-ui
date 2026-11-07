@@ -986,20 +986,28 @@ window.addEventListener("scroll", () => {
 
 // Browser / Hardware Back Navigation (Closes Pages Overview first, then reader, then drawer)
 window.addEventListener("popstate", (e) => {
+  const readerSettings = document.getElementById("reader-settings-dialog");
+  if (readerSettings && readerSettings.classList.contains("open")) {
+    if (typeof toggleReaderSettings === "function") toggleReaderSettings();
+    return;
+  }
   const readerGridSheet = document.getElementById("reader-grid-sheet");
-  const readerModal = document.getElementById("reader-modal");
-  if (!sheet) sheet = document.getElementById("sheet");
-
   if (readerGridSheet && readerGridSheet.classList.contains("open")) {
     if (typeof closeReaderGrid === "function") closeReaderGrid();
     return;
   }
+  const urlParams = new URLSearchParams(window.location.search);
+  const arcId = urlParams.get("id");
+  const readerModal = document.getElementById("reader-modal");
   if (readerModal && readerModal.classList.contains("active")) {
-    if (typeof closeReader === "function") closeReader();
+    if (!arcId) {
+      if (typeof closeReader === "function") closeReader(false);
+    }
     return;
   }
+  if (!sheet) sheet = document.getElementById("sheet");
   if (sheet && sheet.classList.contains("open")) {
-    closeDrawer();
+    if (!arcId) closeDrawer();
     return;
   }
 });
