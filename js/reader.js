@@ -99,6 +99,20 @@ function switchReaderView() {
 
 function renderPagedSpread(idx = currentPageIndex) { loadPagedPage(idx); }
 
+async function fetchArchivePages(arcid, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(`/api/archives/${encodeURIComponent(arcid)}/files`, { priority: "high" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.pages)) return data.pages;
+      }
+    } catch (e) { console.warn(`[Reader] Fetch pages attempt ${attempt}/${maxRetries} failed:`, e); }
+    if (attempt < maxRetries) await new Promise(r => setTimeout(r, 600 * attempt));
+  }
+  return null;
+}
+
 async function openReader(arcid, targetPage = 1, title = null, pushHistory = true) {
   if (typeof targetPage === "string" && isNaN(Number(targetPage))) { title = targetPage; targetPage = 1; }
   targetPage = parseInt(targetPage, 10) || 1;
@@ -134,31 +148,30 @@ async function openReader(arcid, targetPage = 1, title = null, pushHistory = tru
   if (readerSkeleton) readerSkeleton.style.display = "flex";
   if (pagedSpreadWrap) pagedSpreadWrap.style.opacity = "0";
 
-  try {
-    const res = await fetch(`/api/archives/${arcid}/files`);
-    const data = await res.json();
-    currentPages = data.pages || [];
-
-    const scrubberSlider = document.getElementById("scrubber-slider");
-    if (scrubberSlider) scrubberSlider.max = currentPages.length;
+  const pages = await fetchArchivePages(arcid);
+  if (!pages || pages.length === 0) {
     if (readerSkeleton) readerSkeleton.style.display = "none";
     if (pagedSpreadWrap) pagedSpreadWrap.style.opacity = "1";
-
-    const startIdx = (targetPage > 1 && currentPages.length > 0) ? Math.min(targetPage - 1, currentPages.length - 1) : 0;
-    currentPageIndex = startIdx;
-    if (pushHistory && window.history?.pushState) {
-      const url = new URL(window.location);
-      url.searchParams.set("id", arcid);
-      url.searchParams.set("page", startIdx + 1);
-      window.history.pushState({ type: "reader", id: arcid, page: startIdx + 1 }, "", url.pathname + url.search);
-    }
-    loadPagedPage(currentPageIndex);
-  } catch (err) {
-    if (readerSkeleton) readerSkeleton.style.display = "none";
-    if (pagedSpreadWrap) pagedSpreadWrap.style.opacity = "1";
-    alert("Failed to load archive pages: " + err);
+    alert("Failed to load archive pages from server. Please check your connection or try again.");
     closeReader();
+    return;
   }
+
+  currentPages = pages;
+  const scrubberSlider = document.getElementById("scrubber-slider");
+  if (scrubberSlider) scrubberSlider.max = currentPages.length;
+  if (readerSkeleton) readerSkeleton.style.display = "none";
+  if (pagedSpreadWrap) pagedSpreadWrap.style.opacity = "1";
+
+  const startIdx = (targetPage > 1 && currentPages.length > 0) ? Math.min(targetPage - 1, currentPages.length - 1) : 0;
+  currentPageIndex = startIdx;
+  if (pushHistory && window.history?.pushState) {
+    const url = new URL(window.location);
+    url.searchParams.set("id", arcid);
+    url.searchParams.set("page", startIdx + 1);
+    window.history.pushState({ type: "reader", id: arcid, page: startIdx + 1 }, "", url.pathname + url.search);
+  }
+  loadPagedPage(currentPageIndex);
 }
 
 function closeReader(pushHistory = true) {
@@ -181,10 +194,7 @@ function closeReader(pushHistory = true) {
   document.getElementById("reader-settings-backdrop")?.classList.remove("open");
   document.body.classList.remove("modal-open");
 
-  ["paged-img-left", "paged-img-right"].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.src = ""; el.classList.remove("skeleton-loading"); }
-  });
+  ["paged-img-left", "paged-img-right"].forEach(id => { const el = document.getElementById(id); if (el) { el.src = ""; el.classList.remove("skeleton-loading"); } });
 
   const readerSkeleton = document.getElementById("reader-skeleton");
   if (readerSkeleton) readerSkeleton.style.display = "none";
