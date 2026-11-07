@@ -47,11 +47,12 @@ function updateSpreadButton() {
 }
 
 function toggleReaderSettings() {
+  if (window.innerWidth >= 1024) return;
   const dlg = document.getElementById("reader-settings-dialog");
+  const bd = document.getElementById("reader-settings-backdrop");
   if (!dlg) return;
-  const isHidden = (dlg.style.display === "none" || !dlg.style.display);
-  dlg.style.display = isHidden ? "flex" : "none";
-  if (isHidden) updateReaderSettingsUI();
+  const isOpen = dlg.classList.toggle("open");
+  if (bd) bd.classList.toggle("open", isOpen);
 }
 
 function updateReaderSettingsUI() {
@@ -159,8 +160,8 @@ async function openReader(arcid, targetPage = 1, title = null, pushHistory = tru
   updateReaderSettingsUI();
   updateProgressDirection();
 
-  const settingsDlg = document.getElementById("reader-settings-dialog");
-  if (settingsDlg) settingsDlg.style.display = window.innerWidth >= 1024 ? "flex" : "none";
+  document.getElementById("reader-settings-dialog")?.classList.remove("open");
+  document.getElementById("reader-settings-backdrop")?.classList.remove("open");
 
   const readerSkeleton = document.getElementById("reader-skeleton");
   const pagedSpreadWrap = document.getElementById("paged-spread-wrap");
@@ -218,8 +219,8 @@ function closeReader(pushHistory = true) {
     window.history.pushState({ type: "library", page: currentPageNum || 1 }, "", url.pathname + (url.search || ""));
   }
   closeReaderGrid();
-  const settingsDlg = document.getElementById("reader-settings-dialog");
-  if (settingsDlg) settingsDlg.style.display = window.innerWidth >= 1024 ? "flex" : "none";
+  document.getElementById("reader-settings-dialog")?.classList.remove("open");
+  document.getElementById("reader-settings-backdrop")?.classList.remove("open");
   document.body.classList.remove("modal-open");
 
   ["paged-img-left", "paged-img-right"].forEach(id => {

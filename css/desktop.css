@@ -57,25 +57,35 @@ a.manga-card {
 
   /* Topbar Search and Filter Section */
   .footer-search-wrap {
-    flex: 1;
-    max-width: 720px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: none;
     margin: 0;
-    width: auto;
-    gap: 4px;
+    gap: 20px;
   }
 
   .footer-search-row {
-    width: 100%;
+    flex: 0 1 420px;
+    width: 420px;
+    max-width: 480px;
   }
 
   .footer-search-row .input {
-    height: 34px;
-    font-size: 12.5px;
+    height: 36px;
+    font-size: 13px;
   }
 
   .filter-row {
-    padding-top: 1px;
-    gap: 6px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    overflow: visible;
+    padding: 0;
   }
 
   /* Pagination Below Grid on Desktop */
@@ -259,6 +269,10 @@ a.manga-card {
   }
   #reader-settings-btn, #reader-dir-btn, #reader-spread-btn {
     display: none;
+  }
+
+  .reader-settings-backdrop {
+    display: none !important;
   }
 
   /* Centered Reader Pages Overview Modal on Desktop */
