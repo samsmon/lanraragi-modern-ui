@@ -128,7 +128,11 @@ function setupUrlRouting() {
     if (arcId) {
       if (params.has('page')) {
         if (isReaderOpen && typeof currentReaderArcId !== 'undefined' && currentReaderArcId === arcId) {
-          if (typeof loadPagedPage === 'function') loadPagedPage(targetPage - 1);
+          if (typeof isWebtoonMode !== 'undefined' && isWebtoonMode && typeof jumpToPage === 'function') {
+            jumpToPage(targetPage);
+          } else if (typeof loadPagedPage === 'function') {
+            loadPagedPage(targetPage - 1);
+          }
         } else {
           if (typeof openReader === 'function') openReader(arcId, targetPage, null, false);
         }

@@ -94,6 +94,11 @@
     .reader-canvas.webtoon-mode {
       align-items: flex-start;
     }
+    .reader-modal.settings-open .reader-canvas {
+      overflow: hidden !important;
+      pointer-events: none;
+      touch-action: none !important;
+    }
 
     .paged-view {
       display: flex;
@@ -330,6 +335,8 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
+  touch-action: none;
+  overscroll-behavior: none;
 }
 .reader-settings-backdrop.open {
   opacity: 1;
@@ -358,6 +365,8 @@
   gap: 16px;
   transform: translateY(100%);
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  touch-action: pan-y;
+  overscroll-behavior: contain;
 }
 .reader-settings-dialog.open {
   transform: translateY(0);

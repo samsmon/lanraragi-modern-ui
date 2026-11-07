@@ -33,6 +33,7 @@ function toggleReaderSettings() {
   if (!dlg) return;
   const isOpen = dlg.classList.toggle("open");
   if (bd) bd.classList.toggle("open", isOpen);
+  document.getElementById("reader-modal")?.classList.toggle("settings-open", isOpen);
 }
 
 function updateReaderSettingsUI() {
@@ -166,7 +167,7 @@ function closeReader(pushHistory = true) {
 
   const readerModal = document.getElementById("reader-modal");
   const wasActive = readerModal?.classList.contains("active");
-  if (readerModal) readerModal.classList.remove("active", "sidebar-hidden");
+  if (readerModal) readerModal.classList.remove("active", "sidebar-hidden", "settings-open");
 
   if (wasActive && pushHistory && window.history?.pushState) {
     const url = new URL(window.location);
@@ -407,6 +408,7 @@ function initReaderSettingsSwipe() {
   const dlg = document.getElementById("reader-settings-dialog");
   const bd = document.getElementById("reader-settings-backdrop");
   if (!dlg) return;
+  if (bd) bd.addEventListener("touchmove", (e) => { if (e.cancelable) e.preventDefault(); }, { passive: false });
   let startY = 0, deltaY = 0, isDragging = false;
 
   dlg.addEventListener("touchstart", (e) => {
