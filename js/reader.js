@@ -208,6 +208,11 @@ async function openReader(arcid, targetPage = 1, title = null, pushHistory = tru
 }
 
 function closeReader(pushHistory = true) {
+  const pb = document.getElementById("reader-progress-bar");
+  const spb = document.getElementById("reader-screen-progress-bar");
+  if (pb) pb.style.width = "0%";
+  if (spb) spb.style.width = "0%";
+
   const readerModal = document.getElementById("reader-modal");
   const wasActive = readerModal && readerModal.classList.contains("active");
   if (readerModal) {
@@ -263,6 +268,7 @@ function loadPagedPage(idx) {
   if (idx < 0) idx = 0;
   if (idx >= currentPages.length) idx = currentPages.length - 1;
   currentPageIndex = idx;
+  updateProgressBar(idx, currentPages.length);
 
   if (window.history && window.history.replaceState && currentReaderArcId) {
     const url = new URL(window.location);
@@ -329,6 +335,23 @@ function nextPage() {
   } else if (isDoublePage && currentPageIndex + 1 < currentPages.length) {
     loadPagedPage(currentPageIndex + 1);
   }
+}
+
+function updateProgressBar(pageIndex, totalPages) {
+  if (!totalPages || totalPages <= 0) return;
+  const pct = Math.min(100, Math.max(0, ((pageIndex + 1) / totalPages) * 100));
+  const pb = document.getElementById("reader-progress-bar");
+  const spb = document.getElementById("reader-screen-progress-bar");
+  if (pb) pb.style.width = `${pct}%`;
+  if (spb) spb.style.width = `${pct}%`;
+}
+
+function seekReaderPage(e) {
+  if (!currentPages || currentPages.length === 0) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  const target = Math.max(1, Math.min(currentPages.length, Math.round(ratio * currentPages.length)));
+  jumpToPage(target);
 }
 
 function jumpToPage(num) {

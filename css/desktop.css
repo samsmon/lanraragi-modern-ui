@@ -36,7 +36,6 @@ a.manga-card {
     border-bottom: 1px solid var(--border);
     border-top: none;
     padding: 8px 28px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -181,7 +180,6 @@ a.manga-card {
     justify-content: space-between;
     z-index: 1010;
     transform: translateX(0);
-    box-shadow: 10px 0 35px rgba(0, 0, 0, 0.85);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -201,6 +199,15 @@ a.manga-card {
   .reader-modal:has(#reader-bottom.hidden) .reader-canvas {
     margin-left: 0;
     width: 100%;
+  }
+
+  .reader-screen-progress {
+    left: 260px;
+    transition: left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reader-modal.sidebar-hidden .reader-screen-progress,
+  .reader-modal:has(#reader-bottom.hidden) .reader-screen-progress {
+    left: 0;
   }
 
   .reader-controls-row {

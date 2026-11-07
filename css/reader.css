@@ -354,3 +354,31 @@
   letter-spacing: 0.4px;
   color: var(--muted-foreground);
 }
+
+/* Reading Progress Bar */
+.reader-progress-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.reader-progress-bar {
+  height: 100%;
+  background: #38bdf8;
+  border-radius: 2px;
+  transition: width 0.15s ease;
+}
+.reader-screen-progress {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 1008;
+  pointer-events: none;
+}
