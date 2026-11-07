@@ -75,10 +75,18 @@ function updateReaderSettingsUI() {
   if (modeWebtoon) modeWebtoon.classList.toggle("active", isWebtoonMode);
 }
 
+function updateProgressDirection() {
+  const rsp = document.getElementById("reader-screen-progress");
+  if (rsp) {
+    rsp.classList.toggle("rtl", readingDirection === "RTL");
+  }
+}
+
 function setReadingDirection(dir) {
   readingDirection = dir;
   updateReaderDirButton();
   updateReaderSettingsUI();
+  updateProgressDirection();
   if (!isWebtoonMode) renderPagedSpread(currentPageIndex);
 }
 
@@ -168,6 +176,7 @@ async function openReader(arcid, targetPage = 1, title = null, pushHistory = tru
   updateReaderDirButton();
   updateSpreadButton();
   updateReaderSettingsUI();
+  updateProgressDirection();
 
   const settingsDlg = document.getElementById("reader-settings-dialog");
   if (settingsDlg) settingsDlg.style.display = window.innerWidth >= 1024 ? "flex" : "none";
