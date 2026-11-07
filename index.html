@@ -136,38 +136,34 @@
           <button class="btn btn-secondary btn-icon" id="reader-settings-btn" onclick="toggleReaderSettings()" title="Reader Settings"><svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
         </div>
       </div>
+      <div class="reader-settings-dialog" id="reader-settings-dialog" style="display: none;">
+        <div class="settings-header">
+          <span style="font-weight: 600; font-size: 13px;">Reader Settings</span>
+          <button class="btn btn-ghost btn-icon" onclick="toggleReaderSettings()" style="width: 24px; height: 24px;">✕</button>
+        </div>
+        <div class="settings-body">
+          <div class="settings-group">
+            <div class="settings-label">Reading Direction</div>
+            <div class="tabs-list" style="width: 100%;"><button class="tab-trigger active" id="setting-dir-rtl" onclick="setReadingDirection('RTL')" style="flex: 1;">RTL (Manga)</button><button class="tab-trigger" id="setting-dir-ltr" onclick="setReadingDirection('LTR')" style="flex: 1;">LTR (Western)</button></div>
+          </div>
+          <div class="settings-group">
+            <div class="settings-label">Spread Mode</div>
+            <div class="tabs-list" style="width: 100%;"><button class="tab-trigger active" id="setting-spread-single" onclick="setSpreadMode(false)" style="flex: 1;">1 Page</button><button class="tab-trigger" id="setting-spread-double" onclick="setSpreadMode(true)" style="flex: 1;">2 Pages</button></div>
+          </div>
+          <div class="settings-group">
+            <div class="settings-label">View Mode</div>
+            <div class="tabs-list" style="width: 100%;"><button class="tab-trigger active" id="setting-mode-paged" onclick="setReaderMode('paged')" style="flex: 1;">Paged</button><button class="tab-trigger" id="setting-mode-webtoon" onclick="setReaderMode('webtoon')" style="flex: 1;">Webtoon</button></div>
+          </div>
+        </div>
+      </div>
       <div class="reader-pager-wrap">
         <button class="btn btn-secondary btn-icon" onclick="prevPage()" title="Previous Page"><svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
         <div class="reader-page-number" id="scrubber-counter">1 / 1</div>
         <button class="btn btn-secondary btn-icon" onclick="nextPage()" title="Next Page"><svg style="width: 15px; height: 15px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
       </div>
-      <div class="reader-progress-track" id="reader-progress-track" onclick="seekReaderPage(event)" title="Seek page">
-        <div class="reader-progress-bar" id="reader-progress-bar" style="width: 0%;"></div>
-      </div>
     </div>
 
-        <!-- Reader Settings Popover Dialog -->
-    <div class="reader-settings-dialog" id="reader-settings-dialog" style="display: none;">
-      <div class="settings-header">
-        <span style="font-weight: 600; font-size: 13px;">Reader Settings</span>
-        <button class="btn btn-ghost btn-icon" onclick="toggleReaderSettings()" style="width: 24px; height: 24px;">✕</button>
-      </div>
-      <div class="settings-body">
-        <div class="settings-group">
-          <div class="settings-label">Reading Direction</div>
-          <div class="tabs-list" style="width: 100%;"><button class="tab-trigger active" id="setting-dir-rtl" onclick="setReadingDirection('RTL')" style="flex: 1;">RTL (Manga)</button><button class="tab-trigger" id="setting-dir-ltr" onclick="setReadingDirection('LTR')" style="flex: 1;">LTR (Western)</button></div>
-        </div>
-        <div class="settings-group">
-          <div class="settings-label">Spread Mode</div>
-          <div class="tabs-list" style="width: 100%;"><button class="tab-trigger active" id="setting-spread-single" onclick="setSpreadMode(false)" style="flex: 1;">1 Page</button><button class="tab-trigger" id="setting-spread-double" onclick="setSpreadMode(true)" style="flex: 1;">2 Pages</button></div>
-        </div>
-        <div class="settings-group">
-          <div class="settings-label">View Mode</div>
-          <div class="tabs-list" style="width: 100%;"><button class="tab-trigger active" id="setting-mode-paged" onclick="setReaderMode('paged')" style="flex: 1;">Paged</button><button class="tab-trigger" id="setting-mode-webtoon" onclick="setReaderMode('webtoon')" style="flex: 1;">Webtoon</button></div>
-        </div>
-      </div>
-    </div>
-
+    
     <!-- Reader Pages Grid Sheet -->
     <div class="reader-grid-backdrop" id="reader-grid-backdrop" onclick="closeReaderGrid()"></div>
     <div class="reader-grid-sheet" id="reader-grid-sheet">
