@@ -362,6 +362,10 @@
 .reader-settings-dialog.open {
   transform: translateY(0);
 }
+.reader-settings-dialog.dragging,
+.reader-settings-backdrop.dragging {
+  transition: none !important;
+}
 .settings-header {
   display: flex;
   justify-content: space-between;
